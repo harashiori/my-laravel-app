@@ -18,8 +18,8 @@ class CreateAiFeedbacksTable extends Migration
             $table->integer('user_id');
             $table->date('week_start_date');
             $table->text('summary');
-            $table->text('feedbacks');
-            $table->timestamp('create_at')->useCurrent();
+            $table->text('feedback');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
