@@ -1,4 +1,3 @@
-<!-- layouts/app.blade.php を継承 -->
 @extends('layouts.app')
 
 @section('content')
@@ -27,7 +26,7 @@
   <div class="card">
     <div class="card-header">
       本日のスケジュール
-      <a href="{{ route('habits.calender') }}">今週のスケジュール</a>
+      <a href="{{ route('habits.calendar') }}">今週のスケジュール</a>
     </div>
     <div class="card-body">
       <ul class="list-group">

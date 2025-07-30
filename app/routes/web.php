@@ -21,40 +21,78 @@ Route::get('/', function () {
 })->name('home');
 
 // 習慣一覧
-Route::get('/habits.index', function () {
+Route::get('/habits/index', function () {
     return view('habits/index');
 })->name('habits.index');
 
-Route::get('/habits.create', function () {
+Route::get('/habits/create', function () {
     return view('habits/create');
 })->name('habits.create');
 
-Route::get('/habits.store', function () {
+Route::get('/habits/store', function () {
     return view('habits/store');
 })->name('habits.store');
 
-Route::get('/habits.edit', function () {
+Route::get('/habits/edit', function () {
     return view('habits/edit');
 })->name('habits.edit');
 
-Route::get('/habits.destroy', function () {
+Route::get('/habits/destroy', function () {
     return view('habits/destroy');
 })->name('habits.destroy');
 
 
-Route::get('/habits.calender', function () {
-    return view('habits/calender');
-})->name('habits.calender');
+Route::get('/habits/calendar', function () {
+    return view('habits/calendar');
+})->name('habits.calendar');
+
+
 
 // 仮のAIフィードバック
-Route::get('/ai-feedback', function () {
-    return view('gpt.summary');
+Route::get('/gpt/summary', function () {
+    return view('gpt/summary');
 })->name('gpt.summary');
 
-// 仮のログ一覧
-Route::get('/logs', function () {
-    return view('log.index');
-})->name('log.index');
+Route::get('/report/index', function () {
+    return view('report/index');
+})->name('report.index');
+
+Route::get('/report/preview', function () {
+    return view('report/preview');
+})->name('report.preview');
+
+
+
+// ログ
+Route::get('/logs/session', function () {
+    return view('logs/session');
+})->name('logs.session');
+
+
+Route::get('/logs/index', function () {
+    return view('logs/index');
+})->name('logs.index');
+
+Route::get('/logs/analytics', function () {
+    return view('logs/analytics');
+})->name('logs.analytics');
+
+
+//設定
+Route::get('/profile/index', function () {
+    return view('profile/index');
+})->name('profile.index');
+
+
+Route::get('/profile/edit', function () {
+    return view('profile/edit');
+})->name('profile.edit');
+
+
+Route::get('/settings/notifications', function () {
+    return view('settings/notifications');
+})->name('settings.notifications');
+
 
 
 

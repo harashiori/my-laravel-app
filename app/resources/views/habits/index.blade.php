@@ -14,7 +14,7 @@
         <th>継続日数</th>
         <th>予定時間</th>
         <th>通知時間</th>
-        <th>操作</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
