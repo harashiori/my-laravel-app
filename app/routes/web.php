@@ -15,6 +15,31 @@
 //     return view('welcome');
 // });
 
+//ログイン画面
+Route::get('/auth/login', function () {
+    return view('auth/login');
+})->name('login');
+
+Route::get('/auth/register', function () {
+    return view('auth/register');
+})->name('register');
+
+Route::get('/auth/coach_apply', function () {
+    return view('auth/coach_apply');
+})->name('coach.apply');
+
+
+
+// ユーザー用
+Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
+    Route::resource('habits', 'User\HabitController');
+    Route::resource('logs', 'User\LogController');
+    Route::resource('feedbacks', 'User\AiFeedbackController');
+    
+});
+
+
+
 // ホーム画面
 Route::get('/', function () {
     return view('home');
@@ -96,13 +121,6 @@ Route::get('/settings/notifications', function () {
 
 
 
-
-
-
-
-
-
-
 // 管理者用
 Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
     Route::resource('users', 'Admin\UserController');
@@ -110,16 +128,57 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
     Route::resource('admins', 'Admin\AdminController');
 });
 
+
+Route::get('/admin/home', function () {
+    return view('admin/home');
+})->name('admin.home');
+
+Route::get('/admin/users', function () {
+    return view('admin/users');
+})->name('admin.users');
+
+Route::get('/admin/user_edit', function () {
+    return view('admin/user_edit');
+})->name('admin.user_edit');
+
+Route::get('/admin/coaches', function () {
+    return view('admin/coaches');
+})->name('admin.coaches');
+
+Route::get('/admin/coach_edit', function () {
+    return view('admin/coach_edit');
+})->name('admin.coach_edit');
+
+Route::get('/admin/notification_settings', function () {
+    return view('admin/notification_settings');
+})->name('admin.notification_settings');
+
+
+
+
+
+
+
+
 // コーチ用
 Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function () {
     Route::resource('users', 'Coach\UserController');
     Route::resource('comments', 'Coach\CoachCommentController');
 });
 
-// ユーザー用
-Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
-    Route::resource('habits', 'User\HabitController');
-    Route::resource('logs', 'User\LogController');
-    Route::resource('feedbacks', 'User\AiFeedbackController');
-    
-});
+Route::get('/coach/home', function () {
+    return view('coach/home');
+})->name('coach.home');
+
+Route::get('/coach/invite', function () {
+    return view('coach/invite');
+})->name('coach.invite');
+
+Route::get('/coach/user_detail', function () {
+    return view('coach/user_detail');
+})->name('coach.user_detail');
+
+Route::get('/coach/comment', function () {
+    return view('coach/comment');
+})->name('coach.comment');
+
