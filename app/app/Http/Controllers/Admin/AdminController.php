@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,7 +15,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        $admins = Admin::paginate(10);
+        return view('admin.admins.index', compact('admins'));
     }
 
     /**
@@ -24,7 +26,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.admins.create');
     }
 
     /**
@@ -35,7 +37,17 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $validated['password'] = bcrypt($validated['password']);
+
+        Admin::create($validated);
+
+        return redirect()->route('admin.admins.index')->with('success', '管理者を追加しました。');
     }
 
     /**
@@ -57,7 +69,8 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+        return view('admin.admins.edit', compact('admin'));
     }
 
     /**
@@ -69,7 +82,23 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $admin->update($validated);
+
+        return redirect()->route('admin.admins.index')->with('success', '管理者情報を更新しました。'); 
     }
 
     /**
@@ -80,6 +109,9 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+        $admin->delete();
+
+        return redirect()->route('admin.admins.index')->with('success', '管理者を削除しました。');
     }
 }

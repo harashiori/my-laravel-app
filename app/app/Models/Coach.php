@@ -20,6 +20,10 @@ class Coach extends Authenticatable
         'invite_token',
         'invite_token_expires_at',
     ];
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
 
 
     public function users()

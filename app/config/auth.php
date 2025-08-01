@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'coach' => [
+            'driver' => 'session',
+            'provider' => 'coach',
+        ],
+
+
 
         'api' => [
             'driver' => 'token',
@@ -47,6 +57,9 @@ return [
             'hash' => false,
         ],
     ],
+
+        
+
 
     /*
     |--------------------------------------------------------------------------
@@ -68,13 +81,18 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'coaches' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Coach::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*

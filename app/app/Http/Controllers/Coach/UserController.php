@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coach;
 use Illuminate\Http\Request;
 
-class CoachController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +14,7 @@ class CoachController extends Controller
      */
     public function index()
     {
-        $coaches = Coach::paginate(10); // 10件ずつページネーション
-        return view('admin.coaches.index', compact('coaches'));
+        //
     }
 
     /**
@@ -59,8 +57,7 @@ class CoachController extends Controller
      */
     public function edit($id)
     {
-        $coach = Coach::findOrFail($id);
-        return view('admin.coaches.edit', compact('coach'));
+        //
     }
 
     /**
@@ -72,17 +69,7 @@ class CoachController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $coach = Coach::findOrFail($id);
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:coaches,email,' . $coach->id,
-            'status' => 'in:pending,approved,rejected', // 承認ステータス
-        ]);
-
-        $coach->update($validated);
-
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチ情報を更新しました。');
+        //
     }
 
     /**
@@ -93,18 +80,6 @@ class CoachController extends Controller
      */
     public function destroy($id)
     {
-        $coach = Coach::findOrFail($id);
-        $coach->delete();
-
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチを削除しました。');
-    } 
-    
-    public function approve($id)
-    {
-        $coach = Coach::findOrFail($id);
-        $coach->status = 'approved';
-        $coach->save();
-
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチを承認しました。');
+        //
     }
 }

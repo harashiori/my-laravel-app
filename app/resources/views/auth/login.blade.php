@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5" style="max-width: 400px;">
   <h2 class="mb-4 text-center">ログイン</h2>
-  <form method="POST" action="{{ route('login') }}">
+  <form method="POST" action="{{ route('home') }}">
     @csrf
 
     <div class="mb-3">

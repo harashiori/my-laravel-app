@@ -14,6 +14,10 @@ class User extends Authenticatable
         'notification_on',
         'coach_id',
     ];
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
 
     
     public function coach()

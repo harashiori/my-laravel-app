@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CoachController;
+use App\Http\Controllers\Admin\AdminController;
+
+
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,15 +17,49 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//ログイン認証//
+//ユーサー用
+Auth::routes(); 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
+
+Route::prefix('admin')
+    ->middleware('auth:admin')
+    ->name('admin.')
+    ->group(function () {
+
+    // 管理ダッシュボード
+    Route::post('/home', function () {
+        return view('admin.home');
+    })->name('home');
+
+    // ユーザー管理（CRUD）
+    Route::resource('users', UserController::class); // 自動で index/show/edit/etc 作成される
+
+    // コーチ管理（CRUD）
+    Route::resource('coaches', CoachController::class);
+
+    // 管理者管理（必要であれば）
+    Route::resource('admins', AdminController::class);
+
+    // 通知設定画面（1ページのみ表示）
+    Route::get('notification_settings', function () {
+        return view('admin.notification_settings');
+    })->name('notification_settings');
+
+    //コーチ申請認証アクション
+    Route::patch('/coaches/{coach}/approve', [CoachController::class, 'approve'])->name('coaches.approve');
+
+});
+
+
+
+
 
 //ログイン画面
-Route::get('/auth/login', function () {
-    return view('auth/login');
-})->name('login');
+// Route::get('/auth/login', function () {
+//     return view('auth/login');
+// })->name('login');
 
 Route::get('/auth/register', function () {
     return view('auth/register');
@@ -36,12 +77,17 @@ Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
     Route::resource('logs', 'User\LogController');
     Route::resource('feedbacks', 'User\AiFeedbackController');
     
+    // ホーム画面
+    Route::post('/', function () {
+        return view('home');
+    })->name('home');
+
 });
 
 
 
 // ホーム画面
-Route::get('/', function () {
+Route::post('/', function () {
     return view('home');
 })->name('home');
 
@@ -129,29 +175,29 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
 });
 
 
-Route::get('/admin/home', function () {
-    return view('admin/home');
-})->name('admin.home');
+// Route::get('/admin/home', function () {
+//     return view('admin/home');
+// })->name('admin.home');
 
-Route::get('/admin/users', function () {
-    return view('admin/users');
-})->name('admin.users');
+// Route::get('/admin/users', function () {
+//     return view('admin/users');
+// })->name('admin.users');
 
-Route::get('/admin/user_edit', function () {
-    return view('admin/user_edit');
-})->name('admin.user_edit');
+// Route::get('/admin/user_edit', function () {
+//     return view('admin/user_edit');
+// })->name('admin.user_edit');
 
-Route::get('/admin/coaches', function () {
-    return view('admin/coaches');
-})->name('admin.coaches');
+// Route::get('/admin/coaches', function () {
+//     return view('admin/coaches');
+// })->name('admin.coaches');
 
-Route::get('/admin/coach_edit', function () {
-    return view('admin/coach_edit');
-})->name('admin.coach_edit');
+// Route::get('/admin/coach_edit', function () {
+//     return view('admin/coach_edit');
+// })->name('admin.coach_edit');
 
-Route::get('/admin/notification_settings', function () {
-    return view('admin/notification_settings');
-})->name('admin.notification_settings');
+// Route::get('/admin/notification_settings', function () {
+//     return view('admin/notification_settings');
+// })->name('admin.notification_settings');
 
 
 
@@ -161,10 +207,10 @@ Route::get('/admin/notification_settings', function () {
 
 
 // コーチ用
-Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function () {
-    Route::resource('users', 'Coach\UserController');
-    Route::resource('comments', 'Coach\CoachCommentController');
-});
+// Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function () {
+//     Route::resource('users', 'Coach\UserController');
+//     Route::resource('comments', 'Coach\CoachCommentController');
+// });
 
 Route::get('/coach/home', function () {
     return view('coach/home');
