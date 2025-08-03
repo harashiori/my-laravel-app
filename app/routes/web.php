@@ -1,11 +1,18 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CoachController;
 use App\Http\Controllers\Admin\AdminController;
 
+use App\Http\Controllers\User\HabitController;
+use App\Http\Controllers\User\LogController;
+use App\Http\Controllers\User\AiFeedbackController;
 
-use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +24,17 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
+// Route::get('/', function() {
+//     return view('index');
+// }):
+
 //ログイン認証//
 //ユーサー用
 Auth::routes(); 
@@ -28,8 +46,8 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-    // 管理ダッシュボード
-    Route::post('/home', function () {
+    //管理ダッシュボード
+    Route::get('/home', function () {
         return view('admin.home');
     })->name('home');
 
@@ -57,15 +75,35 @@ Route::prefix('admin')
 
 
 //ログイン画面
-// Route::get('/auth/login', function () {
-//     return view('auth/login');
-// })->name('login');
+Route::get('/auth/login', function () {
+    return view('auth.login');
+})->name('login');
 
-Route::get('/auth/register', function () {
+Route::post('/auth/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials, $request->has('remember'))) {
+        // 認証成功時：ログイン成功
+        return redirect()->intended(route('home'));
+    }
+
+    // 認証失敗
+    return back()->withErrors([
+        'email' => 'メールアドレスかパスワードが間違っています。',
+    ])->withInput();
+})->name('login.post');
+
+
+
+
+
+
+
+Route::post('/auth/register', function () {
     return view('auth/register');
 })->name('register');
 
-Route::get('/auth/coach_apply', function () {
+Route::post('/auth/coach_apply', function () {
     return view('auth/coach_apply');
 })->name('coach.apply');
 
@@ -78,7 +116,7 @@ Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
     Route::resource('feedbacks', 'User\AiFeedbackController');
     
     // ホーム画面
-    Route::post('/', function () {
+    Route::get('/', function () {
         return view('home');
     })->name('home');
 
@@ -87,30 +125,30 @@ Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
 
 
 // ホーム画面
-Route::post('/', function () {
+Route::get('/', function () {
     return view('home');
 })->name('home');
 
 // 習慣一覧
-Route::get('/habits/index', function () {
-    return view('habits/index');
-})->name('habits.index');
+// Route::get('/habits/index', function () {
+//     return view('habits/index');
+// })->name('habits/index');
 
-Route::get('/habits/create', function () {
-    return view('habits/create');
-})->name('habits.create');
+// Route::get('/habits/create', function () {
+//     return view('habits/create');
+// })->name('habits.create');
 
-Route::get('/habits/store', function () {
-    return view('habits/store');
-})->name('habits.store');
+// Route::get('/habits/store', function () {
+//     return view('habits/store');
+// })->name('habits.store');
 
-Route::get('/habits/edit', function () {
-    return view('habits/edit');
-})->name('habits.edit');
+// Route::get('/habits/edit', function () {
+//     return view('habits/edit');
+// })->name('habits.edit');
 
-Route::get('/habits/destroy', function () {
-    return view('habits/destroy');
-})->name('habits.destroy');
+// Route::get('/habits/destroy', function () {
+//     return view('habits/destroy');
+// })->name('habits.destroy');
 
 
 Route::get('/habits/calendar', function () {
@@ -175,29 +213,29 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
 });
 
 
-// Route::get('/admin/home', function () {
-//     return view('admin/home');
-// })->name('admin.home');
+Route::get('/admin/home', function () {
+    return view('admin/home');
+})->name('admin.home');
 
-// Route::get('/admin/users', function () {
-//     return view('admin/users');
-// })->name('admin.users');
+Route::get('/admin/users', function () {
+    return view('admin/users');
+})->name('admin.users');
 
-// Route::get('/admin/user_edit', function () {
-//     return view('admin/user_edit');
-// })->name('admin.user_edit');
+Route::get('/admin/user_edit', function () {
+    return view('admin/user_edit');
+})->name('admin.user_edit');
 
-// Route::get('/admin/coaches', function () {
-//     return view('admin/coaches');
-// })->name('admin.coaches');
+Route::get('/admin/coaches', function () {
+    return view('admin/coaches');
+})->name('admin.coaches');
 
-// Route::get('/admin/coach_edit', function () {
-//     return view('admin/coach_edit');
-// })->name('admin.coach_edit');
+Route::get('/admin/coach_edit', function () {
+    return view('admin/coach_edit');
+})->name('admin.coach_edit');
 
-// Route::get('/admin/notification_settings', function () {
-//     return view('admin/notification_settings');
-// })->name('admin.notification_settings');
+Route::get('/admin/notification_settings', function () {
+    return view('admin/notification_settings');
+})->name('admin.notification_settings');
 
 
 

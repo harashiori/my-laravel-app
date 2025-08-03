@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-// use App\Providers\RouteServiceProvider;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -28,6 +28,10 @@ class LoginController extends Controller
      */
     //ログイン後の遷移先
     protected $redirectTo = '/home';
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
 
     /**
      * Create a new controller instance.

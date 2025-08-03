@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Habit;
 
 class HabitController extends Controller
 {
@@ -12,9 +13,11 @@ class HabitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //一覧表示
     public function index()
     {
-        //
+        $habits = Habit::all(); //habitモデルから取得
+        return view ('habits.index');
     }
 
     /**
@@ -22,9 +25,10 @@ class HabitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //新規作成フォーム表示
     public function create()
     {
-        //
+        return view('habits.create');
     }
 
     /**
@@ -33,9 +37,18 @@ class HabitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //保存処理    
     public function store(Request $request)
     {
-        //
+        $request->validate([
+        'name' => 'required|string|max:30',
+        'frequency'=> 'required|string|max:30',
+        'scheduled_time' => 'required|int'
+        ]);
+
+        Habit::create($request->all());
+
+        return redirect()->route('user.habits.index')->with('success', '習慣を追加しました');
     }
 
     /**
@@ -55,9 +68,11 @@ class HabitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //編集フォーム表示
     public function edit($id)
     {
-        //
+        $habit = Habit::findOrFail($id);
+        return view('habits.edit');
     }
 
     /**
@@ -67,9 +82,20 @@ class HabitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //更新処理
     public function update(Request $request, $id)
     {
-        //
+        $habit = Habit::findOrFail($id);
+
+        $request->validate([
+        'name' => 'required|string|max:30',
+        'frequency'=> 'required|string|max:30',
+        'scheduled_time' => 'required|int'
+        ]);
+
+        $habit->update($request->all());
+
+        return redirect()->route('user.habits.index')->with('success', '更新されました');
     }
 
     /**
@@ -78,8 +104,12 @@ class HabitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //削除処理
     public function destroy($id)
     {
-        //
+        $habit = Habit::findOrFail($id);
+        $habit->delete();
+
+        return redirect()->route('user.habits.index')->with('success', '削除されました');
     }
 }

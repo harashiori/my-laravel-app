@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
   <h1 class="mb-4">習慣追加</h1>
-  <form action="{{ route('habits.store') }}" method="POST">
+  <form action="{{ route('user.habits.store') }}" method="POST">
     @csrf
     <div class="mb-3">
       <label class="form-label">習慣名</label>

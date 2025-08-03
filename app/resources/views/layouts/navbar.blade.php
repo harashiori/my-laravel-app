@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('habits.index') }}">習慣</a>
+          <a class="nav-link" href="{{ route('user.habits.index') }}">習慣</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logs.index') }}">ログ</a>
