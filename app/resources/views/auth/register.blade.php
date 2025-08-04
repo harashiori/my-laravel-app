@@ -2,8 +2,17 @@
 
 @section('content')
 <div class="container py-5" style="max-width: 500px;">
-  <h2 class="mb-4 text-center">ユーザー登録</h2>
+  <h2 class="mb-4 text-center">新規登録</h2>
   <form method="POST" action="{{ route('register') }}">
+    
+     @if ($errors->any())
+      <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+      </div>
+    @endif
+  
     @csrf
 
     <div class="mb-3">

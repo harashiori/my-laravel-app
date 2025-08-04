@@ -2,8 +2,13 @@
 
 @section('content')
 <div class="container py-5" style="max-width: 500px;">
-  <h2 class="mb-4 text-center">コーチ申請</h2>
-  <form method="POST" action="{{ route('coach.apply') }}">
+  <h2 class="mb-4 text-center">コーチ申請フォーム</h2>
+  <form method="POST" action="{{ route('coach.apply.submit') }}">
+    
+    @if(session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+  
     @csrf
 
     <div class="mb-3">
@@ -17,13 +22,18 @@
     </div>
 
     <div class="mb-3">
-      <label for="reason" class="form-label">申請理由</label>
-      <textarea class="form-control" id="reason" name="reason" rows="4" placeholder="なぜコーチになりたいかを記入してください" required></textarea>
+      <label for="organization" class="form-label">所属</label>
+      <input type="organization" class="form-control" id="organization" name="organization" required>
+    </div>
+
+   <div class="mb-3">
+      <label for="password" class="form-label">パスワード</label>
+      <input type="password" class="form-control" id="password" name="password" required>
     </div>
 
     <div class="mb-3">
-      <label for="experience" class="form-label">関連する経験（任意）</label>
-      <textarea class="form-control" id="experience" name="experience" rows="3"></textarea>
+      <label for="password_confirmation" class="form-label">パスワード確認</label>
+      <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
     </div>
 
     <button type="submit" class="btn btn-primary w-100">申請する</button>

@@ -3,6 +3,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Auth\MultiGuardLoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\CoachApplyController;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CoachController;
@@ -12,6 +15,8 @@ use App\Http\Controllers\User\HabitController;
 use App\Http\Controllers\User\LogController;
 use App\Http\Controllers\User\AiFeedbackController;
 
+use App\Models\Coach;
+use App\Models\User;
 
 
 /*
@@ -31,13 +36,96 @@ use App\Http\Controllers\User\AiFeedbackController;
 // });
 
 
-// Route::get('/', function() {
-//     return view('index');
-// }):
 
-//ログイン認証//
-//ユーサー用
-Auth::routes(); 
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+
+// ホーム画面
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+//ログインルート//
+// ユーザー（LaravelUIのauthで自動生成）
+Auth::routes();
+
+Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
+Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login');
+Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
+
+
+//ルーティング制御(ミドルウェア)
+Route::group(['middleware' => ['auth:user']], function () {
+    Route::get('/home', function () {
+        return view('home');
+    });
+});
+
+Route::group(['middleware' => ['auth:coach']], function () {
+    Route::get('/coach/home', function () {
+        return view('coach.home');
+    });
+});
+
+Route::group(['middleware' => ['auth:admin']], function () {
+    Route::get('/admin/home', function () {
+        return view('admin.home');
+    });
+});
+
+//新規登録
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+
+
+// Route::get('/auth/register', function () {
+//     return view('auth.register'); 
+// })->name('register');
+
+// Route::post('/register', function (Request $request) {
+//     $request->validate([
+//         'name' => 'required|string|max:255',
+//         'email' => 'required|email|unique:users,email',
+//         'password' => 'required|string|min:8|confirmed',
+//     ]);
+
+//     User::create([
+//         'name' => $request->input('name'),
+//         'email' => $request->input('email'),
+//         'password' => Hash::make($request->input('password')),
+//     ]);
+
+//     return redirect('/home')->with('success', '登録が完了しました。');
+// })->name('register.post');
+
+//コーチ申請画面
+//申請画面の表示
+Route::get('/auth/coach_apply', function () {
+    return view('auth.coach_apply'); // 例：resources/views/auth/coach_apply.blade.php
+})->name('coach.apply');
+
+//申請送信処理（post）
+Route::post('/auth/coach_apply', function (Illuminate\Http\Request $request) {
+    
+    // バリデーションや保存処理をここに追加できます
+       $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email|unique:coaches,email',
+        'organization' => 'nullable|string',
+        'password' => 'required|string|confirmed',
+    ]);
+
+    Coach::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'organization' => $request->input('organization'),
+        'password' => Hash::make($request->input('password')),
+        'status' => 0, // 初期ステータス
+    ]);
+
+    return redirect()->route('coach.apply')->with('success', '申請を受け付けました！');
+})->name('coach.apply.submit');
 
 
 
@@ -72,43 +160,6 @@ Route::prefix('admin')
 
 
 
-
-
-//ログイン画面
-Route::get('/auth/login', function () {
-    return view('auth.login');
-})->name('login');
-
-Route::post('/auth/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
-
-    if (Auth::attempt($credentials, $request->has('remember'))) {
-        // 認証成功時：ログイン成功
-        return redirect()->intended(route('home'));
-    }
-
-    // 認証失敗
-    return back()->withErrors([
-        'email' => 'メールアドレスかパスワードが間違っています。',
-    ])->withInput();
-})->name('login.post');
-
-
-
-
-
-
-
-Route::post('/auth/register', function () {
-    return view('auth/register');
-})->name('register');
-
-Route::post('/auth/coach_apply', function () {
-    return view('auth/coach_apply');
-})->name('coach.apply');
-
-
-
 // ユーザー用
 Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
     Route::resource('habits', 'User\HabitController');
@@ -122,12 +173,6 @@ Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
 
 });
 
-
-
-// ホーム画面
-Route::get('/', function () {
-    return view('home');
-})->name('home');
 
 // 習慣一覧
 // Route::get('/habits/index', function () {
