@@ -15,13 +15,12 @@ class CreateHabitsTable extends Migration
     {
         Schema::create('habits', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->string('name', 30);
-            $table->string('frequency', 30);
-            $table->integer('days')->default(0);
-            $table->integer('schedule_time');
-            $table->time('notification_time')->nullable();
-            $table->timestamp('create_at')->useCurrent();
+            $table->integer('user_id'); 
+            $table->string('name', 30);                                        // 習慣名
+            $table->unsignedInteger('frequency');                              // 目標頻度
+            $table->time('schedule_time');                         // 予定時間
+            $table->time('notification_time')->nullable();                     // 通知時間
+            $table->timestamps();                                              // created_at / updated_at
         });
     }
 

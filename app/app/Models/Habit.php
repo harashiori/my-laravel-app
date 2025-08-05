@@ -3,15 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Habit extends Model
 {
+    protected $table = 'habits';
+
     protected $fillable = [
         'user_id',
         'name',
         'frequency',
         'days',
-        'scheduled_time',
+        'schedule_time',
         'notification_time',
     ];
 

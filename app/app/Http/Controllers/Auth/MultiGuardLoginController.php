@@ -33,7 +33,7 @@ class MultiGuardLoginController extends Controller
         ];
 
         if (Auth::guard($role)->attempt($credentials, $remember)) {
-            return redirect()->intended($guardRedirectMap[$role]);
+            return redirect($guardRedirectMap[$role]);
         }
 
         return back()->withInput($request->only('email', 'role'))

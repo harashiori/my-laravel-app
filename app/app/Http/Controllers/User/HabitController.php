@@ -5,9 +5,16 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Habit;
+use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:user'); //必ずuserガードを使う
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +23,10 @@ class HabitController extends Controller
     //一覧表示
     public function index()
     {
-        $habits = Habit::all(); //habitモデルから取得
-        return view ('habits.index');
+        //ログインユーザーの習慣だけ取得
+        //$habits = Habit::all(); //habitモデルから取得
+        $habits = Habit::where('user_id', Auth::id())->get();
+        return view('habits.index', compact('habits'));
     }
 
     /**
@@ -28,6 +37,9 @@ class HabitController extends Controller
     //新規作成フォーム表示
     public function create()
     {
+        //dd(Auth::guard('user')->check(), Auth::user());
+        //trueが返ればログインできている
+
         return view('habits.create');
     }
 
@@ -40,15 +52,29 @@ class HabitController extends Controller
     //保存処理    
     public function store(Request $request)
     {
-        $request->validate([
-        'name' => 'required|string|max:30',
-        'frequency'=> 'required|string|max:30',
-        'scheduled_time' => 'required|int'
+
+        //dd('store method called');
+        //dd($request->all());
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:30',
+            'frequency'=> 'required|integer|min:1',
+            'schedule_time' => 'required|date_format:H:i',
+            'notification_time' => 'date_format:H:i',
         ]);
 
-        Habit::create($request->all());
+        //dd($validated);
 
-        return redirect()->route('user.habits.index')->with('success', '習慣を追加しました');
+        Habit::create([
+            'user_id' => Auth::id(),
+            'name' => $validated['name'],
+            'frequency' => $validated['frequency'],
+            'schedule_time' => $validated['schedule_time'],
+            'notification_time' => $validated['notification_time'],
+        ]);
+        
+
+        return redirect()->route('user.habits.index')->with('success', '習慣を追加しました');  
     }
 
     /**
@@ -69,10 +95,9 @@ class HabitController extends Controller
      * @return \Illuminate\Http\Response
      */
     //編集フォーム表示
-    public function edit($id)
+    public function edit(Habit $habit)
     {
-        $habit = Habit::findOrFail($id);
-        return view('habits.edit');
+        return view('habits.edit', compact('habit'));
     }
 
     /**
@@ -83,19 +108,18 @@ class HabitController extends Controller
      * @return \Illuminate\Http\Response
      */
     //更新処理
-    public function update(Request $request, $id)
+    public function update(Request $request, Habit $habit)
     {
-        $habit = Habit::findOrFail($id);
-
-        $request->validate([
+        $validated = $request->validate([
         'name' => 'required|string|max:30',
         'frequency'=> 'required|string|max:30',
-        'scheduled_time' => 'required|int'
+        'schedule_time' => 'required|int',
+        'notification_time' => 'int',
         ]);
 
-        $habit->update($request->all());
+        $habit->update($validated);
 
-        return redirect()->route('user.habits.index')->with('success', '更新されました');
+        return redirect()->route('user.habits.index')->with('success', '習慣を更新しました');
     }
 
     /**
@@ -105,11 +129,9 @@ class HabitController extends Controller
      * @return \Illuminate\Http\Response
      */
     //削除処理
-    public function destroy($id)
+    public function destroy(Habit $habit)
     {
-        $habit = Habit::findOrFail($id);
         $habit->delete();
-
-        return redirect()->route('user.habits.index')->with('success', '削除されました');
+        return redirect()->route('user.habits.index')->with('success', '習慣を削除しました');
     }
 }

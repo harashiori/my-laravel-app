@@ -35,11 +35,8 @@ use App\Models\User;
 //     return view('welcome');
 // });
 
-
-
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+// ユーザー（LaravelUIのauthで自動生成）
+//Auth::routes();
 
 // ホーム画面
 Route::get('/', function () {
@@ -47,57 +44,52 @@ Route::get('/', function () {
 })->name('home');
 
 //ログインルート//
-// ユーザー（LaravelUIのauthで自動生成）
-Auth::routes();
 
-Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
-Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login');
-Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
+// Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
+// Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
+// Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
 
 
 //ルーティング制御(ミドルウェア)
-Route::group(['middleware' => ['auth:user']], function () {
+// Route::group(['middleware' => ['auth:user']], function () {
+//     Route::get('/home', function () {
+//         return view('home');
+//     });
+// });
+
+// Route::group(['middleware' => ['auth:coach']], function () {
+//     Route::get('/coach/home', function () {
+//         return view('coach.home');
+//     });
+// });
+
+// Route::group(['middleware' => ['auth:admin']], function () {
+//     Route::get('/admin/home', function () {
+//         return view('admin.home');
+//     });
+// });
+Route::middleware(['web'])->group(function () {
+    Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
+    Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
+    Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
+
     Route::get('/home', function () {
         return view('home');
-    });
-});
+    })->middleware('auth:user');
 
-Route::group(['middleware' => ['auth:coach']], function () {
     Route::get('/coach/home', function () {
         return view('coach.home');
-    });
-});
+    })->middleware('auth:coach');
 
-Route::group(['middleware' => ['auth:admin']], function () {
     Route::get('/admin/home', function () {
         return view('admin.home');
-    });
+    })->middleware('auth:admin');
 });
 
 //新規登録
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
-
-// Route::get('/auth/register', function () {
-//     return view('auth.register'); 
-// })->name('register');
-
-// Route::post('/register', function (Request $request) {
-//     $request->validate([
-//         'name' => 'required|string|max:255',
-//         'email' => 'required|email|unique:users,email',
-//         'password' => 'required|string|min:8|confirmed',
-//     ]);
-
-//     User::create([
-//         'name' => $request->input('name'),
-//         'email' => $request->input('email'),
-//         'password' => Hash::make($request->input('password')),
-//     ]);
-
-//     return redirect('/home')->with('success', '登録が完了しました。');
-// })->name('register.post');
 
 //コーチ申請画面
 //申請画面の表示
@@ -106,25 +98,9 @@ Route::get('/auth/coach_apply', function () {
 })->name('coach.apply');
 
 //申請送信処理（post）
-Route::post('/auth/coach_apply', function (Illuminate\Http\Request $request) {
+Route::post('/auth/coach_apply', function (Request $request) {
     
-    // バリデーションや保存処理をここに追加できます
-       $request->validate([
-        'name' => 'required|string',
-        'email' => 'required|email|unique:coaches,email',
-        'organization' => 'nullable|string',
-        'password' => 'required|string|confirmed',
-    ]);
-
-    Coach::create([
-        'name' => $request->input('name'),
-        'email' => $request->input('email'),
-        'organization' => $request->input('organization'),
-        'password' => Hash::make($request->input('password')),
-        'status' => 0, // 初期ステータス
-    ]);
-
-    return redirect()->route('coach.apply')->with('success', '申請を受け付けました！');
+return redirect()->route('coach.apply')->with('success', '申請を受け付けました！');
 })->name('coach.apply.submit');
 
 
@@ -161,7 +137,7 @@ Route::prefix('admin')
 
 
 // ユーザー用
-Route::prefix('user')->middleware('auth')->name('user.')->group(function () {
+Route::prefix('user')->middleware('auth:user')->name('user.')->group(function () {
     Route::resource('habits', 'User\HabitController');
     Route::resource('logs', 'User\LogController');
     Route::resource('feedbacks', 'User\AiFeedbackController');

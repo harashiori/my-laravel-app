@@ -19,17 +19,17 @@ class CoachApplyController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:coaches,email',
+            'organization' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         Coach::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
             'organization' => $request->input('organization'),
-            'status' => 0, // またはデフォルト値が0
-        ]);
-
+            'password' => Hash::make($request->input('password')),
+            'status' => 0, // 初期ステータス
+        ]); 
         return redirect()->route('coach.apply')->with('success', 'コーチ申請を受け付けました。');
     }
 }

@@ -4,6 +4,10 @@
 <div class="container py-4">
   <h1 class="mb-4">習慣一覧</h1>
 
+  @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+  @endif
+
   <a href="{{ route('user.habits.create') }}" class="btn btn-primary mb-3">＋ 習慣を追加</a>
 
   <table class="table table-bordered">
@@ -18,21 +22,28 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>ジムに行く</td>
-        <td>5回</td>
-        <td>14日</td>
-        <td>08:00</td>
-        <td>07:30</td>
-        <td>
-          <a href="{{ route('user.habits.edit', 1) }}" class="btn btn-sm btn-secondary">編集</a>
-          <form action="{{ route('user.habits.destroy', 1) }}" method="POST" style="display:inline-block">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-sm btn-danger" onclick="return confirm('削除しますか？')">削除</button>
-          </form>
-        </td>
-      </tr>
+    
+    <tbody>
+  @foreach($habits as $habit)
+    <tr>
+      <td>{{ $habit->name }}</td>
+      <td>{{ $habit->frequency }}</td>
+      <td>{{ $habit->days ?? '-' }}</td> {{-- 継続日数: カラムがあれば --}}
+      <td>{{ $habit->schedule_time }}</td>
+      <td>{{ $habit->notification_time }}</td>
+      <td>
+        <a href="{{ route('user.habits.edit', $habit->id) }}" class="btn btn-sm btn-secondary">編集</a>
+        <form action="{{ route('user.habits.destroy', $habit->id) }}" method="POST" style="display:inline-block">
+          @csrf
+          @method('DELETE')
+          <button class="btn btn-sm btn-danger" onclick="return confirm('削除しますか？')">削除</button>
+        </form>
+      </td>
+    </tr>
+  @endforeach
+</tbody>
+
+
     </tbody>
   </table>
 </div>
