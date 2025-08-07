@@ -13,10 +13,10 @@
           <a class="nav-link" href="{{ route('user.habits.index') }}">習慣</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logs.index') }}">ログ</a>
+          <a class="nav-link" href="{{ route('user.logs.index') }}">ログ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logs.session') }}">作業記録</a>
+          <a class="nav-link" href="{{ route('user.logs.create') }}">作業記録</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('gpt.summary') }}">AI分析</a>
@@ -24,9 +24,18 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('profile.index') }}">設定</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>
+        </li> -->
+
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            ログアウト
+          </a>
         </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
 
         @elseif(Auth::guard('coach')->check())
         <!-- コーチとしてログインした場合 -->

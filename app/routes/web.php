@@ -7,9 +7,9 @@ use App\Http\Controllers\Auth\MultiGuardLoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\CoachApplyController;
 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\CoachController;
-use App\Http\Controllers\Admin\AdminController;
+// use App\Http\Controllers\Admin\UserController;
+// use App\Http\Controllers\Admin\CoachController;
+// use App\Http\Controllers\Admin\AdminController;
 
 use App\Http\Controllers\User\HabitController;
 use App\Http\Controllers\User\LogController;
@@ -44,30 +44,6 @@ Route::get('/', function () {
 })->name('home');
 
 //ログインルート//
-
-// Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
-// Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
-// Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
-
-
-//ルーティング制御(ミドルウェア)
-// Route::group(['middleware' => ['auth:user']], function () {
-//     Route::get('/home', function () {
-//         return view('home');
-//     });
-// });
-
-// Route::group(['middleware' => ['auth:coach']], function () {
-//     Route::get('/coach/home', function () {
-//         return view('coach.home');
-//     });
-// });
-
-// Route::group(['middleware' => ['auth:admin']], function () {
-//     Route::get('/admin/home', function () {
-//         return view('admin.home');
-//     });
-// });
 Route::middleware(['web'])->group(function () {
     Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
     Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
@@ -150,28 +126,6 @@ Route::prefix('user')->middleware('auth:user')->name('user.')->group(function ()
 });
 
 
-// 習慣一覧
-// Route::get('/habits/index', function () {
-//     return view('habits/index');
-// })->name('habits/index');
-
-// Route::get('/habits/create', function () {
-//     return view('habits/create');
-// })->name('habits.create');
-
-// Route::get('/habits/store', function () {
-//     return view('habits/store');
-// })->name('habits.store');
-
-// Route::get('/habits/edit', function () {
-//     return view('habits/edit');
-// })->name('habits.edit');
-
-// Route::get('/habits/destroy', function () {
-//     return view('habits/destroy');
-// })->name('habits.destroy');
-
-
 Route::get('/habits/calendar', function () {
     return view('habits/calendar');
 })->name('habits.calendar');
@@ -194,18 +148,18 @@ Route::get('/report/preview', function () {
 
 
 // ログ
-Route::get('/logs/session', function () {
-    return view('logs/session');
-})->name('logs.session');
+// Route::get('/logs/session', function () {
+//     return view('logs/session');
+// })->name('logs.session');
 
 
-Route::get('/logs/index', function () {
-    return view('logs/index');
-})->name('logs.index');
+// Route::get('/logs/index', function () {
+//     return view('logs/index');
+// })->name('logs.index');
 
-Route::get('/logs/analytics', function () {
-    return view('logs/analytics');
-})->name('logs.analytics');
+// Route::get('/logs/analytics', function () {
+//     return view('logs/analytics');
+// })->name('logs.analytics');
 
 
 //設定

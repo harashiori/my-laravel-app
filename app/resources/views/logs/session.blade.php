@@ -10,14 +10,16 @@
     <span class="fw-bold">経過時間：</span><span id="elapsedTime" class="text-danger">00:00:00</span>
   </div>
 
-  <form id="sessionForm" method="POST" action="">
+  <form id="sessionForm" method="POST" action="{{ route('user.logs.store') }}">
     @csrf
     <div class="mb-3">
       <label class="form-label">習慣を選択</label>
       <select name="habit_id" class="form-select">
-        <option value="1">ジム</option>
-        <option value="2">読書</option>
-        <option value="3">日記</option>
+        @foreach($habits as $habit)
+            <option value="{{ $habit->id }}">
+              {{ $habit->name }}
+            </option>
+          @endforeach
       </select>
     </div>
 
@@ -34,6 +36,7 @@
     <div class="mb-3 d-none" id="feedbackSection">
       <label class="form-label">集中度（1〜5）</label>
       <select id="selectConcentration" class="form-select mb-2">
+        <option value="">-- 未選択 --</option>
         @for ($i = 1; $i <= 5; $i++)
           <option value="{{ $i }}">{{ $i }}</option>
         @endfor
@@ -41,6 +44,7 @@
 
       <label class="form-label">満足度（1〜5）</label>
       <select id="selectSatisfaction" class="form-select mb-2">
+        <option value="">-- 未選択 --</option>
         @for ($i = 1; $i <= 5; $i++)
           <option value="{{ $i }}">{{ $i }}</option>
         @endfor
@@ -94,7 +98,7 @@
     clearInterval(timerInterval);
     updateElapsedTime();
     feedbackSection.classList.remove('d-none');
-    alert('作業終了。集中度と満足度を入力してください');
+    alert('お疲れ様でした！集中度と満足度を入力してください');
   });
 
   const form = document.getElementById('sessionForm');
