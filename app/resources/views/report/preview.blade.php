@@ -8,27 +8,59 @@
   <div class="card mb-3">
     <div class="card-header">週間サマリー</div>
     <div class="card-body">
-      <p>今週は「ジム」が計画通り実施され、全体的に良好な習慣継続が見られました。</p>
+      <p>{{ $feedback->summary }}</p>
     </div>
   </div>
 
-  <div class="card mb-3">
+  <!-- <div class="card mb-3">
     <div class="card-header">集中度・満足度傾向</div>
     <div class="card-body">
-      <p>集中度：平均4.2 / 満足度：平均4.0</p>
-      <p>夜間の作業がやや低下傾向。日中へのシフトが有効です。</p>
+      {{-- もし平均値などを計算していたら表示してもよい --}}
+    </div>
+  </div> -->
+
+  <div class="card mb-3">
+    <div class="card-header">ログ詳細</div>
+    <div class="card-body">
+      @if($logs->isEmpty())
+        <p>ログはありません。</p>
+      @else
+        <table class="table">
+          <thead>
+            <tr>
+              <th>習慣名</th>
+              <th>開始時間</th>
+              <th>終了時間</th>
+              <th>集中度</th>
+              <th>満足度</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($logs as $log)
+              <tr>
+                <td>{{ $log->habit->name ?? '不明' }}</td>
+                <td>{{ $log->start_time->format('Y-m-d H:i') }}</td>
+                <td>{{ $log->end_time->format('Y-m-d H:i') }}</td>
+                <td>{{ $log->concentration }}</td>
+                <td>{{ $log->satisfaction }}</td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      @endif
     </div>
   </div>
+
 
   <div class="card mb-3">
     <div class="card-header">AIからの提案</div>
     <div class="card-body">
-      <p>朝の時間帯の習慣実行率が高いため、重要タスクは午前に設定することを推奨します。</p>
+      <p>{{ $feedback->feedback }}</p>
     </div>
   </div>
 
   <div class="text-end">
-    <a href="{{ route('report.index') }}" class="btn btn-secondary">一覧へ戻る</a>
+    <a href="{{ route('user.reports.index') }}" class="btn btn-secondary">一覧へ戻る</a>
   </div>
 </div>
 @endsection

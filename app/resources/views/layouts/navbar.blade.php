@@ -19,7 +19,7 @@
           <a class="nav-link" href="{{ route('user.logs.create') }}">作業記録</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('gpt.summary') }}">AI分析</a>
+          <a class="nav-link" href="{{ route('user.aifeedbacks.index') }}">AI分析</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('profile.index') }}">設定</a>

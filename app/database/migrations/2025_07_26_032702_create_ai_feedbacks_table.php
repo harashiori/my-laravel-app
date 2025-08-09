@@ -19,7 +19,7 @@ class CreateAiFeedbacksTable extends Migration
             $table->date('week_start_date');
             $table->text('summary');
             $table->text('feedback');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
