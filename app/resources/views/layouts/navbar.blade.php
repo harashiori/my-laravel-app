@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container">
-    <a class="navbar-brand" href="{{ route('home') }}">Times Review</a>
+    <a class="navbar-brand" href="{{ route('user.homes.index') }}">Times Review</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -22,7 +22,7 @@
           <a class="nav-link" href="{{ route('user.aifeedbacks.index') }}">AI分析</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('profile.index') }}">設定</a>
+          <a class="nav-link" href="{{ route('user.profiles.index') }}">設定</a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>

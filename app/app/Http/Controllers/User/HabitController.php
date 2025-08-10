@@ -112,9 +112,9 @@ class HabitController extends Controller
     {
         $validated = $request->validate([
         'name' => 'required|string|max:30',
-        'frequency'=> 'required|string|max:30',
-        'schedule_time' => 'required|int',
-        'notification_time' => 'int',
+        'frequency'=> 'required|integer|min:1|max:7',
+        'schedule_time' => 'required|date_format:H:i',
+        'notification_time' => 'nullable|date_format:H:i',
         ]);
 
         $habit->update($validated);
@@ -133,5 +133,15 @@ class HabitController extends Controller
     {
         $habit->delete();
         return redirect()->route('user.habits.index')->with('success', '習慣を削除しました');
+    }
+
+
+    //スケジュールカレンダー表示
+     public function calendar()
+    {
+        $habits = Habit::where('user_id', Auth::id())->get();
+        
+        return view('habits.calendar', compact('habits'));
+
     }
 }

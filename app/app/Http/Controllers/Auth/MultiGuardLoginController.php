@@ -50,6 +50,11 @@ class MultiGuardLoginController extends Controller
                 Auth::guard($guard)->logout();
             }
         }
+
+        // セッションを無効化して再生成（セキュリティ対策）
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/auth/login');
     }
 }

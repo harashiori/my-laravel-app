@@ -11,10 +11,13 @@ use App\Http\Controllers\Auth\CoachApplyController;
 // use App\Http\Controllers\Admin\CoachController;
 // use App\Http\Controllers\Admin\AdminController;
 
+use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\HabitController;
 use App\Http\Controllers\User\LogController;
 use App\Http\Controllers\User\AiFeedbackController;
-use App\Http≠Controllers\User\ReportController;
+use App\Http\Controllers\User\ReportController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\NotificationSettingController;
 
 use App\Models\Coach;
 use App\Models\User;
@@ -36,8 +39,8 @@ use App\Models\User;
 
 
 Route::get('/', function () {
-        return view('home');
-    })->name('home');
+        return view('auth/login');
+    });
 
 // ホーム画面
 // Route::get('/', function () {
@@ -52,9 +55,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
     Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
 
-    Route::get('/home', function () {
-        return view('home');
-    })->middleware('auth:user');
+    Route::get('/home', 'User\HomeController@index')->middleware('auth:user')->name('home');
 
     Route::get('/coach/home', function () {
         return view('coach.home');
@@ -117,41 +118,36 @@ Route::prefix('admin')
 
 // ユーザー用
 Route::prefix('user')->middleware('auth:user')->name('user.')->group(function () {
+    Route::resource('homes', 'User\HomeController');
     Route::resource('habits', 'User\HabitController');
     Route::resource('logs', 'User\LogController');
     Route::resource('aifeedbacks', 'User\AiFeedbackController');
     Route::resource('reports', 'User\ReportController');
+    Route::resource('profiles', 'User\ProfileController');
 
+    //スケジュールカレンダー
+    // Route::get('habits/calendar', 'User\HabitController@calendar')->name('habits.calendar');
+    
     //PDF出力用ルート
     Route::post('reports/{id}/pdf', 'User\ReportController@exportPdf')->name('reports.pdf');
     
-    // ホーム画面
-    Route::get('/', function () {
-        return view('home');
-    })->name('home');
-
-
-   
-
+    
+    // 通知設定ページ
+    Route::get('/settings/notifications', 'User\NotificationSettingController@index')
+        ->name('settings.notifications');
+    // ON/OFF切り替え
+    Route::post('/settings/notifications/toggle', 'User\NotificationSettingController@toggle')
+        ->name('settings.notifications.toggle');
+    // FCMトークン保存
+    Route::post('/settings/notifications/token', 'User\NotificationSettingController@updateToken')
+        ->name('settings.notifications.token');
+    
+    
 
 });
 
-
-Route::get('/habits/calendar', function () {
-    return view('habits/calendar');
-})->name('habits.calendar');
-
-
-
-//設定
-Route::get('/profile/index', function () {
-    return view('profile/index');
-})->name('profile.index');
-
-
-Route::get('/profile/edit', function () {
-    return view('profile/edit');
-})->name('profile.edit');
+Route::get('habits/calendar', 'User\HabitController@calendar')->name('habits.calendar');
+    
 
 
 Route::get('/settings/notifications', function () {

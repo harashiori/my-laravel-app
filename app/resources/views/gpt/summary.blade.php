@@ -12,7 +12,7 @@
   <form class="row g-3 align-items-end mb-4" method="GET" action="{{ route('user.aifeedbacks.index') }}">
     <div class="col-md-4">
       <label class="form-label">対象週を選択</label>
-      <input type="week" class="form-control" name="week" value=>
+      <input type="week" class="form-control" name="week" value="{{ request('week') }}">
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-primary">分析</button>
@@ -21,17 +21,17 @@
 
   
     <div class="card mb-4">
-      <div class="card-header">AIによる要約</div>
-      <div class="card-body">
-        <p></p>
+      <div class="card-header fw-bold">AIによる要約</div>
+      <div class="card-body" style="white-space: pre-line;">
+        {!! $summaryHtml ?? '<p>まだ要約はありません</p>' !!}
       </div>
     </div>
 
     
     <div class="card">
-      <div class="card-header">改善提案</div>
-      <div class="card-body">
-        <p></p>
+      <div class="card-header fw-bold">改善提案</div>
+      <div class="card-body"style="white-space: pre-line;">
+        {!! $feedbacksHtml ?? '<p>まだ改善提案はありません</p>' !!}
       </div>
     </div>
 

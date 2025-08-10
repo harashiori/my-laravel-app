@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Log;
 use App\Models\AiFeedback;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+
+use Illuminate\Support\Str;
+use League\CommonMark\CommonMarkConverter; 
 
 class AiFeedbackController extends Controller
 {
@@ -26,6 +30,9 @@ class AiFeedbackController extends Controller
         $week = $request->input('week');
         $summary = null;
         $feedbacks = null;
+        $summaryHtml = null;
+        $feedbacksHtml = null;
+            
 
         if($week) {
 
@@ -85,8 +92,23 @@ class AiFeedbackController extends Controller
             } else {
                 $summary = $aiText;
             }
+
+
+            // Markdown → HTML 変換
+            $converter = new CommonMarkConverter([
+                'html_input' => 'strip', // HTMLタグを無効化（セキュリティ）
+                'allow_unsafe_links' => false,
+            ]);
+
+            if ($summary) {
+                $summaryHtml = $converter->convertToHtml($summary ?? '');
+            }
+            if ($feedbacks) {
+                $feedbacksHtml = $converter->convertToHtml($feedbacks ?? '');
+            }
+
         }
-        return view('gpt.summary', compact('summary', 'feedbacks', 'week'));
+        return view('gpt.summary', compact('summary', 'feedbacks', 'summaryHtml', 'feedbacksHtml', 'week'));
     }
     
 
@@ -98,6 +120,15 @@ class AiFeedbackController extends Controller
     public function create()
     {
         //
+    }
+
+
+    //週開始日を計算するヘルパーメソッド
+
+    protected function calculateWeekStartDate(string $week): string
+    {
+        [$year, $weekNumber] = explode('-W', $week);
+        return Carbon::now()->setISODate((int)$year, (int)$weekNumber)->startOfWeek()->toDateString();
     }
 
     /**
@@ -117,11 +148,12 @@ class AiFeedbackController extends Controller
         AiFeedback::create([
             'user_id' => auth()->id(),
             'week' => $data['week'],
+            'week_start_date' => $this->calculateWeekStartDate($data['week']),
             'summary' => $data['summary'],
-            'feedbacks' => $data['feedbacks'],
+            'feedback' => $data['feedbacks'],
         ]);
 
-        return redirect()->route('user.aifeedback.index')
+        return redirect()->route('user.aifeedbacks.index')
             ->with('success', 'AIフィードバックを保存しました。');
     }
 

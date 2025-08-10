@@ -7,6 +7,16 @@
     @csrf
     @method('PUT')
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+      <ul>
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+      </ul>
+    </div>
+    @endif
+  
     <div class="mb-3">
       <label class="form-label">習慣名</label>
       <input type="text" name="name" value="{{ old('name', $habit->name) }}" class="form-control" required>
@@ -17,7 +27,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">予定時間</label>
-      <input type="time" name="scheduled_time" value="{{ old('schedule_time', $habit->schedule_time) }}" class="form-control">
+      <input type="time" name="schedule_time" value="{{ old('schedule_time', $habit->schedule_time) }}" class="form-control">
     </div>
     <div class="mb-3">
       <label class="form-label">通知時間</label>
