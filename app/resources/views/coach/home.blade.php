@@ -8,21 +8,30 @@
     <div class="card-header">担当ユーザー一覧</div>
     <div class="card-body">
       <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          山田太郎
-          <a href="{{ route('coach.user_detail', 1) }}" class="btn btn-sm btn-outline-primary">詳細</a>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          鈴木花子
-          <a href="{{ route('coach.user_detail', 2) }}" class="btn btn-sm btn-outline-primary">詳細</a>
-        </li>
+
+        @forelse ($assignedUsers as $user)
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ $user->name }}
+            <a href="{{ route('coach.users.show', ['user' => $user->id]) }}" class="btn btn-sm btn-outline-primary">詳細</a>
+          </li>
+        @empty
+          <li class="list-group-item">担当ユーザーはいません。</li>
+        @endforelse
+
       </ul>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card mb-4">
+    <div class="card-header">コメント履歴</div>
+    <div class="card-body"></div>
+  </div>
+
+
+  <div class="card mb-4">
     <div class="card-header">ユーザー招待</div>
     <div class="card-body">
+
       @php
         $inviteCreatedAt = \Carbon\Carbon::parse($inviteCreatedAt ?? now()->subDays(6));
         $isExpired = $inviteCreatedAt->lt(now()->subDays(5));
@@ -40,6 +49,7 @@
           <button type="submit" class="btn btn-primary">新しい招待リンクを発行</button>
         </form>
       @endif
+
     </div>
   </div>
 </div>

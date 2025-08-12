@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Habit;
-use App\Models\Log;
 
-class HomeController extends Controller
+
+class CoachHomeController extends Controller
 {
 
      public function __construct()
     {
-        $this->middleware('auth:user');
+        $this->middleware('auth:coach');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -24,27 +22,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $coach = Auth::guard('coach')->user();
 
-        // ユーザーの習慣一覧（複数の習慣がある想定）
-        $habits = Habit::where('user_id', $user->id)->get();
+        // 担当ユーザー5件取得（例：リレーションが users() なら）
+        $assignedUsers = $coach->users()->take(5)->get();
 
-        // 各習慣の継続日数を計算して配列に
-        // ここでは継続日数を「連続して習慣達成している日数」と仮定
-        foreach ($habits as $habit) {
-            $habit->streak_days = $habit->calculateStreakDays();  // Habitモデルにメソッドを作る想定
-        }
+        return view('coach.home', compact('assignedUsers'));
 
-        // 直近5件のログ（全習慣のログをまとめて取得し、最新5件）
-        $logs = Habit::where('user_id', $user->id)->get();
-
-        $logs = Log::whereHas('habit', function($q) use ($user) {
-            $q->where('user_id', $user->id);
-        })->orderBy('created_at', 'desc')
-          ->limit(5)
-          ->get();
-
-        return view('home', compact('habits', 'logs'));
     }
 
     /**
@@ -76,7 +60,7 @@ class HomeController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**

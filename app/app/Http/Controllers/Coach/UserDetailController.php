@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User; 
+Use App\Models\Habit;
+Use App\Models\Log;
 
-class UserController extends Controller
+
+class UserDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +19,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        // ユーザーを取得
+        $user = User::findOrFail($user_id);
+
+        // 作業ログを取得（例：recent 5件など）
+        // 作業ログのモデル名を WorkLog と仮定
+        $logs = $user->logs()->orderBy('date', 'desc')->take(5)->get();
+
+        return view('coach.user_detail', compact('user', 'logs'));
     }
 
     /**
@@ -46,7 +58,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($userId);
+
+        // 作業ログを取得（例：最新5件）
+        $workLogs = $user->logs()->orderBy('date', 'desc')->take(5)->get();
+
+        return view('coach.user_detail', compact('user', 'logs'));
     }
 
     /**

@@ -2,11 +2,14 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">山田太郎さんの記録</h1>
+  <h1 class="mb-4">{{ $user->name }}の記録</h1>
 
   <div class="card mb-4">
     <div class="card-header">最近の作業ログ</div>
     <div class="card-body">
+      @if($workLogs->isEmpty())
+        <p>作業ログがありません。</p>
+      @else
       <table class="table table-striped">
         <thead>
           <tr>
@@ -18,20 +21,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>2025-07-27</td>
-            <td>読書</td>
-            <td>4</td>
-            <td>5</td>
-            <td><a href="{{ route('coach.comment', 1) }}" class="btn btn-sm btn-outline-secondary">コメント</a></td>
-          </tr>
-          <tr>
-            <td>2025-07-26</td>
-            <td>ジム</td>
-            <td>5</td>
-            <td>4</td>
-            <td><a href="{{ route('coach.comment', 2) }}" class="btn btn-sm btn-outline-secondary">コメント</a></td>
-          </tr>
+          @foreach($workLogs as $log)
+            <tr>
+              <td>{{ $log->date->format('Y-m-d') }}</td>
+              <td>{{ $log->habit_name }}</td>
+              <td>{{ $log->concentration }}</td>
+              <td>{{ $log->satisfaction }}</td>
+              <td><a href="" class="btn btn-sm btn-outline-secondary">コメント</a></td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

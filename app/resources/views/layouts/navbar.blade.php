@@ -1,6 +1,17 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container">
-    <a class="navbar-brand" href="{{ route('user.homes.index') }}">Times Review</a>
+
+  @php
+    if (Auth::guard('user')->check()) {
+        $homeRoute = route('user.home.index');
+    } elseif (Auth::guard('coach')->check()) {
+        $homeRoute = route('coach.home');
+    } else {
+        $homeRoute = url('/');
+    }
+  @endphp
+
+    <a class="navbar-brand" href="{{ $homeRoute }}">Times Review</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,10 +35,6 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('user.profiles.index') }}">設定</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>
-        </li> -->
-
         <li class="nav-item">
           <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             ログアウト
@@ -39,6 +46,15 @@
 
         @elseif(Auth::guard('coach')->check())
         <!-- コーチとしてログインした場合 -->
+        <li class="nav-item">
+          <a class="nav-link" href="">担当ユーザー一覧</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="">招待</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">設定</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>
         </li>

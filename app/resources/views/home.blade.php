@@ -46,7 +46,7 @@
   <div class="card">
     <div class="card-header">
       本日のスケジュール
-      <a href="{{ route('habits.calendar') }}">今週のスケジュール</a>
+      <a href="{{ route('user.habits.calendar') }}">今週のスケジュール</a>
     </div>
     <div class="card-body">
       <ul class="list-group">
