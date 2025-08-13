@@ -56,14 +56,14 @@ class UserDetailController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::findOrFail($userId);
+        // $user = User::findOrFail($user->id);
 
         // 作業ログを取得（例：最新5件）
-        $workLogs = $user->logs()->orderBy('date', 'desc')->take(5)->get();
+        $workLogs = $user->logs()->with('habit')->orderBy('created_at', 'desc')->take(5)->get();
 
-        return view('coach.user_detail', compact('user', 'logs'));
+        return view('coach.user_detail', compact('user', 'workLogs'));
     }
 
     /**

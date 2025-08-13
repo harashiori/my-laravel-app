@@ -20,8 +20,6 @@ class CreateCoachesTable extends Migration
             $table->string('password', 100);
             $table->string('organization', 100);
             $table->integer('status')->default(0);
-            $table->string('invite_taken', 64)->nullable();
-            $table->dateTime('invite_token_expires_at')->nullable();
             $table->timestamps();
         });
     

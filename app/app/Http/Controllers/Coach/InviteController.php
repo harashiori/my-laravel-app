@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Carbon\Carbon;
 
-
-class CoachHomeController extends Controller
+class InviteController extends Controller
 {
-
-     public function __construct()
-    {
-        $this->middleware('auth:coach');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -22,17 +17,7 @@ class CoachHomeController extends Controller
      */
     public function index()
     {
-        $coach = Auth::guard('coach')->user();
-
-        // 担当ユーザー5件取得（例：リレーションが users() なら）
-        $assignedUsers = $coach->users()->take(5)->get();
-
-        // 自分が過去にしたコメントを取得（ユーザー情報と一緒に）
-        $comments = $coach->coachComments()->with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('coach.home', compact('assignedUsers', 'comments'));
+        //
     }
 
     /**
@@ -53,7 +38,28 @@ class CoachHomeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $coach = Auth::guard('coach')->user();
+
+        // 招待トークンを生成
+        $token = Str::random(32);
+
+        // 有効期限（5日後など）
+        $expiresAt = Carbon::now()->addDays(5);
+
+        // coachesテーブルに保存
+        $coach->update([
+            'invite_token' => $token,
+            'invite_token_expires_at' => $expiresAt,
+        ]);
+
+        // 招待URL作成
+        $inviteUrl = route('register', ['token' => $token]);
+
+        return response()->json([
+            'inviteUrl' => $inviteUrl,
+            'inviteCreatedAt' => now()->format('Y-m-d H:i:s'),
+            'expiresAt' => $expiresAt->format('Y-m-d H:i:s')
+        ]);
     }
 
     /**
@@ -64,7 +70,7 @@ class CoachHomeController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**

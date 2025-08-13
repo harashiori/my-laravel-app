@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCoachCommentsTable extends Migration
+class AddTimestampsToCoachCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,7 @@ class CreateCoachCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('coach_comments', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('coach_id');
-            $table->integer('user_id');
-            $table->text('comment');
+        Schema::table('coach_comments', function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -29,6 +25,8 @@ class CreateCoachCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coach_comments');
+        Schema::table('coach_comments', function (Blueprint $table) {
+            $table->dropTimestamps();
+        });
     }
 }

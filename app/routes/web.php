@@ -175,6 +175,7 @@ Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function
     Route::resource('coachhomes', 'Coach\CoachHomeController');
     Route::resource('users', 'Coach\UserDetailController');
     Route::resource('comments', 'Coach\CoachCommentController');
+    Route::resource('invites', 'Coach\InviteController');
 
 });
 
