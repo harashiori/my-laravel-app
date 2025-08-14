@@ -17,6 +17,9 @@ use App\Http\Controllers\User\NotificationSettingController;
 
 use App\Http\Controllers\Coach\CoachHomeController;
 use App\Http\Controllers\Coach\UserDetailController;
+use App\Http\Controllers\Coach\CoachCommentController;
+use App\Http\Controllers\Coach\InviteController;
+use App\Http\Controllers\Coach\CoachProfileController;
 
 use App\Models\Coach;
 use App\Models\User;
@@ -172,10 +175,11 @@ Route::prefix('user')->middleware('auth:user')->name('user.')->group(function ()
 
 // コーチ用
 Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function () {
-    Route::resource('coachhomes', 'Coach\CoachHomeController');
+    Route::resource('coach-homes', 'Coach\CoachHomeController');
     Route::resource('users', 'Coach\UserDetailController');
     Route::resource('comments', 'Coach\CoachCommentController');
     Route::resource('invites', 'Coach\InviteController');
+    Route::resource('coach-profiles', 'Coach\CoachProfileController');
 
 });
 

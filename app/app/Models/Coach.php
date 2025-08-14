@@ -25,6 +25,12 @@ class Coach extends Authenticatable
         'remember_token'
     ];
 
+    //bladeで「addDays()」を利用できるように
+    protected $casts = [
+        'invite_token_expires_at' => 'datetime',
+    ];
+
+
 
     public function users()
     {

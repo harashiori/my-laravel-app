@@ -5,7 +5,7 @@
     if (Auth::guard('user')->check()) {
         $homeRoute = route('user.home.index');
     } elseif (Auth::guard('coach')->check()) {
-        $homeRoute = route('coach.home');
+        $homeRoute = route('coach.coach-homes.index');
     } else {
         $homeRoute = url('/');
     }
@@ -47,13 +47,13 @@
         @elseif(Auth::guard('coach')->check())
         <!-- コーチとしてログインした場合 -->
         <li class="nav-item">
-          <a class="nav-link" href="">担当ユーザー一覧</a>
+          <a class="nav-link" href="#">担当ユーザー一覧</a>
         </li>
          <li class="nav-item">
-          <a class="nav-link" href="">招待</a>
+          <a class="nav-link" href="#">招待</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">設定</a>
+          <a class="nav-link" href="{{ route('coach.coach-profiles.index') }}">設定</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>

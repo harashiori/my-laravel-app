@@ -37,55 +37,72 @@
     </div>
   </div>
 
-
   <div class="card mb-4">
     <div class="card-header">ユーザー招待</div>
-    <div class="card-body">
+      <div class="card-body">
 
-      @php
-        $inviteCreatedAt = \Carbon\Carbon::parse($inviteCreatedAt ?? now()->subDays(6));
-        $isExpired = $inviteCreatedAt->lt(now()->subDays(5)); 
-      @endphp
-      <!-- $inviteCreatedAt 未定義なら6日前を設定して期限切れ扱い使いする  -->
-      <!-- $inviteCreatedAt->lt(now()->subDays(5)) 「発行から5日以上経っているか」判定 -->
+        @php
+          $coach = auth('coach')->user();
+          $inviteUrl = $coach->invite_token 
+            ? route('register', ['token' => $coach->invite_token]) 
+            : null;
+          $isExpired = $coach->invite_token_expires_at 
+            ? now()->gt($coach->invite_token_expires_at) 
+            : null;
+        @endphp
 
-      @if(!$isExpired)
-        <p>以下のURLから新規ユーザーを招待できます。</p>
-        <input type="text" class="form-control mb-2" value="{{ $inviteUrl }}" readonly>
-        <p class="text-muted">
-          発行日時：{{ $inviteCreatedAt }}（有効期限：{{ $inviteCreatedAt->copy()->addDays(5) }}まで）
-        </p>
-        <button class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText('{{ $inviteUrl }}')">コピー</button>
-      @else
-        <p class="text-danger">現在の招待URLは有効期限切れです（{{ $inviteCreatedAt }} 発行）。</p>
-        <form method="POST" action="{{ route('coach.invites.store') }}">
-          @csrf
-          <button type="submit" class="btn btn-primary">新しい招待リンクを発行</button>
-        </form>
-      @endif
-    </div>
+        <!-- 未発行状態  -->
+        @if(!$inviteUrl)
+          <p>まだ招待リンクは発行されていません。</p>
+          <button class="btn btn-primary" id="generateInviteBtn">招待リンクを発行</button>
+
+        <!-- 有効期限切れ -->
+        @elseif($isExpired)
+          <p class="text-danger">招待リンクは有効期限切れです（{{ ($coach->invite_token_expires_at)->addDays(5) }} まで有効でした）。</p>
+          <button class="btn btn-primary" id="generateInviteBtn">新しい招待リンクを発行</button>
+
+        <!-- 有効期限内 -->
+        @else
+          <p>以下のURLから新規ユーザーを招待できます。</p>
+          <input type="text" id="inviteUrl" class="form-control mb-2" value="{{ $inviteUrl ?? '' }}" readonly>
+          <p class="text-muted" id="inviteInfo">
+            発行日時：{{ $coach->invite_token_expires_at }}（有効期限：{{ ($coach->invite_token_expires_at)->addDays(5) }}まで）
+          </p>
+          <button class="btn btn-primary" id="generateInviteBtn">新しい招待リンクを発行</button>
+          <button class="btn btn-outline-secondary mb-2" id="copyBtn">コピー</button>
+          <p id="copyMessage" class="text-success mb-2" style="display: none;">コピーしました！</p>
+        @endif
+      </div>
   </div>
 
-<script>
-document.getElementById('generateInviteBtn').addEventListener('click', function() {
-    fetch("{{ route('coach.invites.store') }}", {
-        method: "POST",
-        headers: {
+  <script>
+  document.getElementById('copyBtn').addEventListener('click', function() {
+    const url = document.getElementById('inviteUrl').value;
+    navigator.clipboard.writeText(url).then(() => {
+        document.getElementById('copyMessage').style.display = 'block';
+        setTimeout(() => document.getElementById('copyMessage').style.display = 'none', 2000);
+        });
+  });
+
+  document.getElementById('generateInviteBtn').addEventListener('click', function() {
+      fetch("{{ route('coach.invites.store') }}", {
+          method: "POST",
+          headers: {
             'X-CSRF-TOKEN': "{{ csrf_token() }}",
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-    })
-    .then(response => response.json())
-    .then(data => {
+          },
+          body: JSON.stringify({})
+       })
+      .then(response => response.json())
+      .then(data => {
         document.getElementById('inviteUrl').value = data.inviteUrl;
         document.getElementById('inviteInfo').innerText = 
-            '発行日時：' + data.inviteCreatedAt + '（有効期限：' + data.expiresAt + 'まで）';
-    })
-    .catch(error => console.error('Error:', error));
-});
-</script>
+          '発行日時：' + data.inviteCreatedAt + '（有効期限：' + data.expiresAt + 'まで）';
+      })
+      .catch(error => console.error('Error:', error));
+  });
+  </script>
 
 </div>
 @endsection

@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Coach;
 use Carbon\Carbon;
 
 class InviteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:coach');
+    }
+
     /**
      * Display a listing of the resource.
      *
