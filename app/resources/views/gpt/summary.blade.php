@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
   <div class="d-flex align-items-center justify-content-between mb-4">
-    <h1 class="mb-4">AIフィードバック</h1>
+    <h2 class="mb-4">AIフィードバック</h2>
     <div class="col-auto">
       <a href="{{ route('user.reports.index') }}">過去のフィードバック一覧</a>
     </div>

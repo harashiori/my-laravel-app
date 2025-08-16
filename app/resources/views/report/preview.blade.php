@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">レポートプレビュー</h1>
+  <h2 class="mb-4">レポートプレビュー</h2>
 
   <div class="card mb-3">
     <div class="card-header">週間サマリー</div>
@@ -25,7 +25,7 @@
       @if($logs->isEmpty())
         <p>ログはありません。</p>
       @else
-        <table class="table">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th>習慣名</th>

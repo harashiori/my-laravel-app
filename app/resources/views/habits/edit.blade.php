@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">習慣編集</h1>
+  <h2 class="mb-4">習慣編集</h2>
   <form action="{{ route('user.habits.update', ['habit' => $habit->id]) }}" method="POST">
     @csrf
     @method('PUT')

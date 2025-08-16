@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">レポート出力</h1>
+  <h2 class="mb-4">レポート出力</h2>
 
   <div class="mb-3">
     <form class="row g-3 align-items-end">

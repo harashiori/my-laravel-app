@@ -4,7 +4,7 @@
 <div class="container py-4">
   <!-- ユーザー名とコメントボタン -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>{{ $user->name }}の記録</h2>
+    <h3>{{ $user->name }}の記録</h3>
     <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#commentForm">
       コメント        
     </button>

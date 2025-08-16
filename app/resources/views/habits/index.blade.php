@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">習慣一覧</h1>
+  <h2 class="mb-4">習慣一覧</h2>
 
   @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -10,7 +10,7 @@
 
   <a href="{{ route('user.habits.create') }}" class="btn btn-primary mb-3">＋ 習慣を追加</a>
 
-  <table class="table table-bordered">
+  <table class="table table table-striped">
     <thead class="table-light">
       <tr>
         <th>習慣名</th>

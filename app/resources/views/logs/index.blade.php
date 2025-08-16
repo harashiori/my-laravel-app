@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">作業ログ一覧</h1>
+  <h2 class="mb-4">作業ログ一覧</h2>
   <div>
     <a href="">#</a>
   </div> 
@@ -53,7 +53,6 @@
       </tr>
     @endforelse
     </tbody>
-
   </table>
 </div>
 @endsection

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">コメント入力</h1>
+  <h2 class="mb-4">コメント入力</h2>
 
   <div class="card mb-4">
     <div class="card-header">対象ログ</div>

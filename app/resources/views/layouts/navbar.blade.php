@@ -3,9 +3,11 @@
 
   @php
     if (Auth::guard('user')->check()) {
-        $homeRoute = route('user.home.index');
+        $homeRoute = route('user.homes.index');
     } elseif (Auth::guard('coach')->check()) {
         $homeRoute = route('coach.coach-homes.index');
+    } elseif (Auth::guard('admin')->check()) {
+        $homeRoute = route('admin.admin-homes.index');
     } else {
         $homeRoute = url('/');
     }
@@ -47,7 +49,7 @@
         @elseif(Auth::guard('coach')->check())
         <!-- コーチとしてログインした場合 -->
         <li class="nav-item">
-          <a class="nav-link" href="#">担当ユーザー一覧</a>
+          <a class="nav-link" href="">担当ユーザー一覧</a>
         </li>
          <li class="nav-item">
           <a class="nav-link" href="#">招待</a>
@@ -56,18 +58,36 @@
           <a class="nav-link" href="{{ route('coach.coach-profiles.index') }}">設定</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>
+          <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            ログアウト
+          </a>
         </li>
-
-
-
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
 
         
         @elseif(Auth::guard('admin')->check())
         <!-- 管理者としてログインした場合 -->
+
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('logout') }}">ログアウト</a>
+          <a class="nav-link" href="{{ route('admin.users.index') }}">ユーザー管理</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('admin.coaches.index') }}">コーチ管理</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">通知設定</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            ログアウト
+          </a>
+        </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
 
 
         @else

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">通知設定</h1>
+  <h2 class="mb-4">通知設定</h2>
 
   <form method="POST" action="{{  route('user.settings.notifications.toggle') }}">
     @csrf
@@ -14,7 +14,7 @@
 
     <div class="mb-4">
       <label class="form-label">習慣別通知時間</label>
-      <table class="table">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>習慣</th>

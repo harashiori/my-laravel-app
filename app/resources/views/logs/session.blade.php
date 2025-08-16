@@ -1,38 +1,53 @@
-
 @extends('layouts.app')
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">作業セッション記録</h1>
-    
-  <div class="mb-3">
-    <span class="fw-bold">現在時刻：</span><span id="currentTime" class="text-primary"></span><br>
-    <span class="fw-bold">経過時間：</span><span id="elapsedTime" class="text-danger">00:00:00</span>
+  <h2 class="mb-4">作業セッション記録</h2>
+
+  <div class="mb-4">
+    <label class="form-label fw-bold">習慣を選択</label>
+    <select name="habit_id" class="form-select ">
+      @foreach($habits as $habit)
+        <option value="{{ $habit->id }}">{{ $habit->name }}</option>
+      @endforeach
+    </select>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6 mb-2">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">現在時刻</h6>
+          <p id="currentTime" class="fs-4 text-primary">--:--:--</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-2">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">経過時間</h6>
+          <p id="elapsedTime" class="fs-4 text-danger">00:00:00</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <form id="sessionForm" method="POST" action="{{ route('user.logs.store') }}">
     @csrf
-    <div class="mb-3">
-      <label class="form-label">習慣を選択</label>
-      <select name="habit_id" class="form-select">
-        @foreach($habits as $habit)
-            <option value="{{ $habit->id }}">
-              {{ $habit->name }}
-            </option>
-          @endforeach
-      </select>
-    </div>
 
     <input type="hidden" name="start_time" id="start_time">
     <input type="hidden" name="end_time" id="end_time">
     <input type="hidden" name="concentration" id="concentration">
     <input type="hidden" name="satisfaction" id="satisfaction">
 
-    <div class="mb-3">
-      <button type="button" id="startBtn" class="btn btn-success">開始</button>
-      <button type="button" id="endBtn" class="btn btn-danger" disabled>終了</button>
+    <div class="d-flex justify-content-center gap-3">
+      <button type="button" id="startBtn" class="btn btn-success btn-lg ">
+        開始
+      </button>
+      <button type="button" id="endBtn" class="btn btn-danger btn-lg" disabled>
+        終了
+      </button>
     </div>
-
     <div class="mb-3 d-none" id="feedbackSection">
       <label class="form-label">集中度（1〜5）</label>
       <select id="selectConcentration" class="form-select mb-2">

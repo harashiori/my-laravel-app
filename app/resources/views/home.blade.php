@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
   <!-- ホーム画面 -->
-  <h1 class="mb-4">マイページ</h1>
+  <h2 class="mb-4">マイページ</h2>
 
   <!-- 習慣の継続日数 -->
   <div class="card mb-4">
@@ -25,7 +25,7 @@
   </div>
 
   <!-- 直近5件のログ -->
-  <div class="card">
+  <div class="card mb-4">
     <div class="card-header">直近の習慣ログ</div>
     <div class="card-body">
       @if($logs->isEmpty())
@@ -43,10 +43,9 @@
   </div> 
 
   <!-- 本日のスケジュール -->
-  <div class="card">
-    <div class="card-header">
-      本日のスケジュール
-      <a href="{{ route('user.habits.calendar') }}">今週のスケジュール</a>
+  <div class="card mb-4">
+    <div class="card-header d-flex align-items-center justify-content-between mb-4">本日のスケジュール
+      <a href="">今週のスケジュール</a>
     </div>
     <div class="card-body">
       <ul class="list-group">
@@ -54,4 +53,5 @@
     </div>
   </div>
 </div>
+
 @endsection

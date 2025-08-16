@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">プロフィール設定編集</h1>
+  <h2 class="mb-4">プロフィール設定編集</h2>
 
   <form method="POST" action="{{ route( 'user.profiles.update', $user->id ) }}">
     @csrf

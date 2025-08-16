@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             AiFeedbackSeeder::class,
             LogsTableSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

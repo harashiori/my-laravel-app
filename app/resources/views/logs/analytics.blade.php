@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">時間分析</h1>
+  <h2 class="mb-4">時間分析</h2>
 
   <form class="mb-4">
     <label class="form-label">習慣を選択</label>

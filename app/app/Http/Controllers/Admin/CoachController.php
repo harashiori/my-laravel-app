@@ -3,11 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coach;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Coach;
+
+
 
 class CoachController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    } 
+    
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +24,9 @@ class CoachController extends Controller
      */
     public function index()
     {
+        //$admin = Auth::guard('admin')->user();
         $coaches = Coach::paginate(10); // 10件ずつページネーション
-        return view('admin.coaches.index', compact('coaches'));
+        return view('admin.coaches', compact('coaches'));
     }
 
     /**
@@ -48,7 +58,9 @@ class CoachController extends Controller
      */
     public function show($id)
     {
-        //
+        $coach = Coach::findOrFail($id);
+        
+        return view('admin.coach_edit', compact('coach'));
     }
 
     /**
@@ -60,7 +72,7 @@ class CoachController extends Controller
     public function edit($id)
     {
         $coach = Coach::findOrFail($id);
-        return view('admin.coaches.edit', compact('coach'));
+        return view('admin.coach_edit', compact('coach'));
     }
 
     /**
@@ -82,7 +94,7 @@ class CoachController extends Controller
 
         $coach->update($validated);
 
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチ情報を更新しました。');
+        return redirect()->route('admin.coaches')->with('success', 'コーチ情報を更新しました。');
     }
 
     /**
@@ -96,15 +108,20 @@ class CoachController extends Controller
         $coach = Coach::findOrFail($id);
         $coach->delete();
 
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチを削除しました。');
+        return redirect()->route('admin.coaches')->with('success', 'コーチを削除しました');
     } 
     
     public function approve($id)
     {
         $coach = Coach::findOrFail($id);
-        $coach->status = 'approved';
+        $coach->status = 1;
         $coach->save();
 
-        return redirect()->route('admin.coaches.index')->with('success', 'コーチを承認しました。');
-    }
+        //Ajaxの場合はJSONで返す
+        if(request()->ajax()){
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->route('admin.coaches');
+    }    
 }

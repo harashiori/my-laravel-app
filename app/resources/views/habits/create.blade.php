@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">習慣追加</h1>
+  <h2 class="mb-4">習慣追加</h2>
 
   @if ($errors->any())
   <div class="alert alert-danger">

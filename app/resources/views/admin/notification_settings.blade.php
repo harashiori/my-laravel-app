@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">通知設定</h1>
+  <h2 class="mb-4">通知設定</h2>
 
   <form method="POST" action="">
     @csrf

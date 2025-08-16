@@ -41,7 +41,7 @@ class LogController extends Controller
         }
 
         // ログ取得
-        $logs = $query->get();
+        $logs = $query->orderBy('created_at', 'desc')->get();
 
         // ビューに渡す
         return view('logs.index', compact('logs', 'habits'));

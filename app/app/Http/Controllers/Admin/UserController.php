@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    } 
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +23,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = \App\Models\User::paginate(10);
-        return view('admin.users.index', compact('users'));
+        // $admin = Auth::guard('admin')->user();
+        $users = User::paginate(10);
+        return view('admin.users', compact('users'));
     }
 
     /**
@@ -46,9 +55,11 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return view('admin.users.show', compact('user'));
+        $user = User::with(['habits', 'logs'])->findOrFail($id);
+        
+        return view('admin.user_edit', compact('user'));
     }
 
     /**
@@ -59,7 +70,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users', compact('user'));
     }
 
     /**
@@ -78,7 +89,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('admin.users.index')->with('success', 'ユーザー情報を更新しました。');
+        return redirect()->route('admin.users')->with('success', 'ユーザー情報を更新しました。');
     }
 
     /**
@@ -90,6 +101,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'ユーザーを削除しました。');
+        return redirect()->route('admin.users')->with('success', 'ユーザーを削除しました。');
     }
 }

@@ -21,8 +21,13 @@ use App\Http\Controllers\Coach\CoachCommentController;
 use App\Http\Controllers\Coach\InviteController;
 use App\Http\Controllers\Coach\CoachProfileController;
 
+use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CoachController;
+
 use App\Models\Coach;
 use App\Models\User;
+use App\Models\Admin;
 
 
 /*
@@ -44,13 +49,6 @@ Route::get('/', function () {
         return view('auth/login');
     });
 
-// ホーム画面
-// Route::get('/', function () {
-//     return view('auth.login');
-// })->name('login');
-
-
-
 //ログインルート//
 Route::middleware(['web'])->group(function () {
     Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
@@ -61,9 +59,7 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/coach/home', 'Coach\CoachHomeController@index')->middleware('auth:coach')->name('coach.home');
 
-    Route::get('/admin/home', function () {
-        return view('admin.home');
-    })->middleware('auth:admin');
+    Route::get('/admin/home', 'Admin\AdminHomeController@index')->middleware('auth:admin')->name('admin.home');
 });
 
 //新規登録
@@ -73,38 +69,30 @@ Route::post('register', 'Auth\RegisterController@register');
 
 //コーチ申請画面
 //申請画面の表示
-Route::get('coachapply', 'Auth\CoachApplyController@showForm')->name('coach.apply');
+Route::get('coach-apply', 'Auth\CoachApplyController@showForm')->name('coach.apply');
 
 //申請送信処理（post）
-Route::post('coachapply', 'Auth\CoachApplyController@submit')->name('coach.apply.submit');
+Route::post('coach-apply', 'Auth\CoachApplyController@submit')->name('coach.apply.submit');
 
 
-Route::prefix('admin')
-    ->middleware('auth:admin')
-    ->name('admin.')
-    ->group(function () {
+Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
+    Route::resource('admin-homes', 'Admin\AdminHomeController');
+    //ユーザー管理
+    Route::resource('users', 'Admin\UserController');
+    //コーチ管理
+    Route::resource('coaches', 'Admin\CoachController');
+    //コーチ申請認証アクション
+    Route::patch('/coaches/{coach}/approve', 'Admin\CoachController@approve')->name('coaches.approve');
 
-    //管理ダッシュボード
-    Route::get('/home', function () {
-        return view('admin.home');
-    })->name('home');
+    
+    //  通知設定画面（1ページのみ表示）
+    Route::get('notification_settings', function () {
+         return view('admin.notification_settings');
+        })->name('notification_settings');
 
-    // // ユーザー管理（CRUD）
-    // Route::resource('users', UserController::class); // 自動で index/show/edit/etc 作成される
-
-    // // コーチ管理（CRUD）
-    // Route::resource('coaches', CoachController::class);
-
-    // // 管理者管理（必要であれば）
-    // Route::resource('admins', AdminController::class);
-
-    // // 通知設定画面（1ページのみ表示）
-    // Route::get('notification_settings', function () {
-    //     return view('admin.notification_settings');
-    // })->name('notification_settings');
-
-    // //コーチ申請認証アクション
-    // Route::patch('/coaches/{coach}/approve', [CoachController::class, 'approve'])->name('coaches.approve');
+    // Route::get('/admin/notification_settings', function () {
+    //     return view('admin/notification_settings');
+    // })->name('admin.notification_settings');
 
 });
 
@@ -118,11 +106,10 @@ Route::prefix('user')->middleware('auth:user')->name('user.')->group(function ()
     Route::resource('profiles', 'User\ProfileController');
 
     //スケジュールカレンダー
-    Route::get('habits/calendar', 'User\HabitController@calendar')->name('habits.calendar');
+    Route::get('/habits/calendar', 'User\HabitController@calendar')->name('habits.calendar');
     
     //PDF出力用ルート
     Route::post('reports/{id}/pdf', 'User\ReportController@exportPdf')->name('reports.pdf');
-    
     
     // 通知設定ページ
     Route::get('/settings/notifications', 'User\NotificationSettingController@index')
@@ -135,44 +122,6 @@ Route::prefix('user')->middleware('auth:user')->name('user.')->group(function ()
         ->name('settings.notifications.token');
 });
 
-
-
-
-
-// 管理者用
-// Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
-//     Route::resource('users', 'Admin\UserController');
-//     Route::resource('coaches', 'Admin\CoachController');
-//     Route::resource('admins', 'Admin\AdminController');
-// });
-
-
-// Route::get('/admin/home', function () {
-//     return view('admin/home');
-// })->name('admin.home');
-
-// Route::get('/admin/users', function () {
-//     return view('admin/users');
-// })->name('admin.users');
-
-// Route::get('/admin/user_edit', function () {
-//     return view('admin/user_edit');
-// })->name('admin.user_edit');
-
-// Route::get('/admin/coaches', function () {
-//     return view('admin/coaches');
-// })->name('admin.coaches');
-
-// Route::get('/admin/coach_edit', function () {
-//     return view('admin/coach_edit');
-// })->name('admin.coach_edit');
-
-// Route::get('/admin/notification_settings', function () {
-//     return view('admin/notification_settings');
-// })->name('admin.notification_settings');
-
-
-
 // コーチ用
 Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function () {
     Route::resource('coach-homes', 'Coach\CoachHomeController');
@@ -182,20 +131,4 @@ Route::prefix('coach')->middleware('auth:coach')->name('coach.')->group(function
     Route::resource('coach-profiles', 'Coach\CoachProfileController');
 
 });
-
-// Route::get('/coach/home', function () {
-//     return view('coach/home');
-// })->name('coach.home');
-
-// Route::get('/coach/invite', function () {
-//     return view('coach/invite');
-// })->name('coach.invite');
-
-// Route::get('/coach/user_detail', function () {
-//     return view('coach/user_detail');
-// })->name('coach.user_detail');
-
-// Route::get('/coach/comment', function () {
-//     return view('coach/comment');
-// })->name('coach.comment');
 

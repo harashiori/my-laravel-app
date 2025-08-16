@@ -11,7 +11,7 @@ use App\Models\User;
 class CoachHomeController extends Controller
 {
 
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth:coach');
     }

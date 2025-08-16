@@ -2,39 +2,44 @@
 
 @section('content')
 <div class="container py-4">
-  <h1 class="mb-4">ユーザー管理</h1>
+  <h2 class="mb-4">ユーザー一覧／管理</h2>
 
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>ユーザーID</th>
+        <!-- <th>ユーザーID</th> -->
         <th>名前</th>
         <th>メール</th>
+        <th>担当コーチ</th>
+        <th>通知設定</th>
         <th>登録日</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
+      @forelse($users as $user)
       <tr>
-        <td>1</td>
-        <td>山田太郎</td>
-        <td>yamada@example.com</td>
-        <td>2025-05-01</td>
+        <!-- <td>{{ $user->id }}</td> -->
+        <td>{{ $user->name }}</td>
+        <td>{{ $user->email }}</td>
+        <td>{{ $user->coach_id ? $user->coach->name : '-' }}</td>
         <td>
-          <a href="{{ route('admin.user_edit') }}" class="btn btn-sm btn-outline-secondary">詳細</a>
-          <!-- <a href="#" class="btn btn-sm btn-outline-danger">削除</a> -->
+          @if($user->notification_on)
+            オン
+          @else
+            オフ
+          @endif
+        </td>
+        <td>{{ $user->created_at->format('Y-m-d') }}</td>
+        <td>
+          <a href="{{ route('admin.users.show', $user->id) }}"  class="btn btn-sm btn-outline-secondary">詳細</a>
         </td>
       </tr>
+      @empty
       <tr>
-        <td>2</td>
-        <td>鈴木花子</td>
-        <td>suzuki@example.com</td>
-        <td>2025-06-10</td>
-        <td>
-          <a href="{{ route('admin.user_edit') }}" class="btn btn-sm btn-outline-secondary">詳細</a>
-          <!-- <a href="#" class="btn btn-sm btn-outline-danger">削除</a> -->
-        </td>
+        <td colspan="5" class="text-center">ユーザーが登録されていません。</td>
       </tr>
+      @endforelse
     </tbody>
   </table>
 </div>
