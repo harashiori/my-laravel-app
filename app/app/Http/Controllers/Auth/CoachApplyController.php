@@ -31,6 +31,6 @@ class CoachApplyController extends Controller
             'password' => Hash::make($request->input('password')),
             'status' => 0, // 初期ステータス
         ]); 
-        return redirect()->route('coach.apply')->with('success', 'コーチ申請を受け付けました。');
+        return redirect()->route('login')->with('success', 'コーチ申請を受け付けました。');
     }
 }

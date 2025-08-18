@@ -47,5 +47,12 @@
 
     <button type="submit" class="btn btn-primary w-100">申請する</button>
   </form>
+
+  <!-- 成功時アラート -->
+  @if(session('success'))
+    <script>
+      alert("{{ session('success') }}");
+    </script>
+  @endif
 </div>
 @endsection

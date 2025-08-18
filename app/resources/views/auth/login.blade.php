@@ -22,7 +22,7 @@
 
     <div class="mb-3">
       <label for="email" class="form-label">メールアドレス</label>
-      <input type="email" class="form-control" id="email" name="email" required autofocus>
+      <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" autofocus>
     </div>
 
     <div class="mb-3">
@@ -35,7 +35,8 @@
       <label class="form-check-label" for="remember">ログイン状態を保持する</label>
     </div>
 
-    <div>
+    <div class="mb-3">
+      <label class="form-label">ロール選択</label>
       <select name="role" class="form-select form-select-sm" required>
         <option value="user">ユーザー</option>
         <option value="coach">コーチ</option>
@@ -53,7 +54,7 @@
   <hr>
 
   <div class="text-center">
-    <p class="mb-2">まだアカウントをお持ちでない方はこちら：</p>
+    <p class="mb-3">まだアカウントをお持ちでない方はこちら：</p>
     <a href="{{ route('register') }}" class="btn btn-outline-success w-100 mb-2">新規ユーザー登録</a>
     <a href="{{ route('coach.apply') }}" class="btn btn-outline-secondary w-100">コーチ申請はこちら</a>
   </div>

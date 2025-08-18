@@ -17,12 +17,12 @@
 
     <div class="mb-3">
       <label for="name" class="form-label">名前</label>
-      <input type="text" class="form-control" id="name" name="name" required>
+      <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">メールアドレス</label>
-      <input type="email" class="form-control" id="email" name="email" required>
+      <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
     </div>
 
     <div class="mb-3">
@@ -37,5 +37,12 @@
 
     <button type="submit" class="btn btn-success w-100">登録</button>
   </form>
+
+   <!-- 成功時アラート -->
+  @if(session('success'))
+    <script>
+      alert("{{ session('success') }}");
+    </script>
+  @endif
 </div>
 @endsection

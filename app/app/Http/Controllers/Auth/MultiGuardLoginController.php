@@ -25,7 +25,7 @@ class MultiGuardLoginController extends Controller
         $remember = $request->filled('remember');
         $role = $request->input('role');
 
-        // ガード名とリダイレクト先の
+        // ガード名とリダイレクト先
         $guardRedirectMap = [
             'user'  => '/home',
             'coach' => '/coach/home',
