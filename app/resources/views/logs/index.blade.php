@@ -3,6 +3,12 @@
 @section('content')
 <div class="container py-4">
   <h2 class="mb-4">作業ログ一覧</h2>
+
+  <!-- セッションメッセージ -->
+  @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+  @endif
+
   <div>
     <a href="">#</a>
   </div> 

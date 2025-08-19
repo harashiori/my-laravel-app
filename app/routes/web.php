@@ -120,6 +120,8 @@ Route::prefix('user')->middleware('auth:user')->name('user.')->group(function ()
     // FCMトークン保存
     Route::post('/settings/notifications/token', 'User\NotificationSettingController@updateToken')
         ->name('settings.notifications.token');
+
+    Route::get('/pdf-test', 'User\ReportController@generate')->name('test.pdf');
 });
 
 // コーチ用

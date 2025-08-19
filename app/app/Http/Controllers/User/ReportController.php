@@ -9,7 +9,7 @@ use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-use PDF; //facade
+use Barryvdh\DomPDF\Facade\Pdf; //facade
 
 class ReportController extends Controller
 {
@@ -116,21 +116,36 @@ class ReportController extends Controller
     //PDF出力用メソッド（exportPdf）
     public function exportPdf($id)
     {
-
+        // 対象のフィードバックを取得
         $feedback = AiFeedback::findOrFail($id);
 
+        // 対象週の開始日と終了日を取得
         $weekStartDate = Carbon::parse($feedback->week_start_date);
         $weekEndDate = $weekStartDate->copy()->addDays(6)->endOfDay();
 
+        // 対象週のログを取得
         $logs = Log::whereBetween('start_time', [$weekStartDate, $weekEndDate])->get();
 
-        // BladeでPDF生成
+        // Blade から PDF を作成
         $pdf = PDF::loadView('report.preview', compact('feedback', 'logs'))
             ->setPaper('a4')
-            ->setOption('defaultFont', 'ipaexg');  // フォント名は適宜
+            ->setOption('defaultFont', 'ipaexg');  // IPAexG を指定
+
+        // ブラウザで表示
         return $pdf->stream('report.pdf');
 
-        // return view('report.preview', compact('feedback', 'logs'));
-        return $pdf->download('report_' . $weekStartDate->format('Ymd') . 'pdf');
+        // ダウンロードさせたい場合はこちら
+        // return $pdf->download('report_' . $weekStartDate->format('Ymd') . '.pdf');
+    }
+
+    
+     public function generate()
+    {
+        $pdf = Pdf::loadView('pdf_test')
+                ->setPaper('a4')
+                ->setOption('defaultFont', 'ipaexg');
+
+        // ブラウザで表示
+        return $pdf->stream('test.pdf');
     }
 }

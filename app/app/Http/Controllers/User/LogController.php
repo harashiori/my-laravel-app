@@ -77,16 +77,16 @@ class LogController extends Controller
         ]);
 
 
-        $start = Carbon::parse($request->start_time);
-        $end = Carbon::parse($request->end_time);
+        $start = Carbon::parse($request->start_time)->timezone('Asia/Tokyo');
+        $end = Carbon::parse($request->end_time)->timezone('Asia/Tokyo');
         $duration = $start->diffInMinutes($end); // 実施時間
 
         $log = new Log();
         $log->user_id = Auth::id();
         $log->habit_id = $request->habit_id;
         //Carbonを使ってMySQLに合った形式に変換
-        $log->start_time = Carbon::parse($request->start_time)->format('Y-m-d H:i:s');
-        $log->end_time = Carbon::parse($request->end_time)->format('Y-m-d H:i:s');
+        $log->start_time = Carbon::parse($request->start_time)->timezone('Asia/Tokyo');
+        $log->end_time = Carbon::parse($request->end_time)->timezone('Asia/Tokyo');
         $log->concentration = $request->concentration ?: null;
         $log->satisfaction = $request->satisfaction ?: null;
         $log->duration = $duration; // 分単位で保存

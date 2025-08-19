@@ -1,6 +1,6 @@
 <style>
   body {
-    font-family: 'notoserifcjk', serif;
+    font-family: ipaexg, sans-serif; 
   }
 </style>
 

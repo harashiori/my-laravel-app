@@ -58,11 +58,11 @@ return array(
         "font_cache" => storage_path('fonts/'),
 
         'font_family' => [
-            'notoserifcjk' => [
-                'normal' => 'NotoSerifCJKjp-Light.otf',
-                'bold' => 'NotoSerifCJKjp-Light.otf',       // 適宜用意できれば本来の太字ファイルにする
-                'italic' => 'NotoSerifCJKjp-Light.otf',     // OTFなのでイタリックが無い場合は同じファイルで代用
-                'bold_italic' => 'NotoSerifCJKjp-Light.otf',
+            'ipaexg' => [
+                'normal' => 'ipaexg.ttf',
+                'bold' => 'ipaexg.ttf',
+                'italic' => 'ipaexg.ttf',
+                'bold_italic' => 'ipaexg.ttf',
             ],
         ],
 
@@ -195,7 +195,7 @@ return array(
          * Used if no suitable fonts can be found. This must exist in the font folder.
          * @var string
          */
-        "default_font" => "serif",
+        "default_font" => "ipaexg",
 
         /**
          * Image DPI setting
