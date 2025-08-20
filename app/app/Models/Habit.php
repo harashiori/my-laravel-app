@@ -14,7 +14,6 @@ class Habit extends Model
         'user_id',
         'name',
         'frequency',
-        'days',
         'schedule_time',
         'notification_time',
     ];
@@ -38,10 +37,12 @@ class Habit extends Model
         });
 
         $streak = 0;
-        $today = Carbon::today();
+        $baseDate = $logs->contains(Carbon::today()) 
+        ? Carbon::today()   // 今日のログがある場合は今日から
+        : Carbon::yesterday(); // ない場合は昨日から
 
         foreach ($logs as $logDate) {
-            if ($logDate->equalTo($today->copy()->subDays($streak))) {
+            if ($logDate->equalTo($baseDate->copy()->subDays($streak))) {
                 $streak++;
             } else {
                 break;

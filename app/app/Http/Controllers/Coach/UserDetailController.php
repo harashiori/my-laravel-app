@@ -28,9 +28,9 @@ class UserDetailController extends Controller
         // ユーザーを取得
         $user = User::findOrFail($user_id);
 
-        // 作業ログを取得（例：recent 5件など）
+        // 作業ログを取得（例：recent 10件など）
         // 作業ログのモデル名を WorkLog と仮定
-        $logs = $user->logs()->orderBy('date', 'desc')->take(5)->get();
+        $logs = $user->logs()->orderBy('date', 'desc')->take(10)->get();
 
         return view('coach.user_detail', compact('user', 'logs'));
     }
@@ -66,8 +66,8 @@ class UserDetailController extends Controller
     {
         // $user = User::findOrFail($user->id);
 
-        // 作業ログを取得（例：最新5件）
-        $workLogs = $user->logs()->with('habit')->orderBy('created_at', 'desc')->take(5)->get();
+        // 作業ログを取得（例：最新10件）
+        $workLogs = $user->logs()->with('habit')->orderBy('created_at', 'desc')->take(10)->get();
 
         return view('coach.user_detail', compact('user', 'workLogs'));
     }

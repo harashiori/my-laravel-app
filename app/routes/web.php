@@ -45,22 +45,46 @@ use App\Models\Admin;
 //Auth::routes();
 
 
+// Route::get('/', function () {
+//         return view('auth/login');
+//     });
 Route::get('/', function () {
-        return view('auth/login');
-    });
+    return redirect()->route('login');
+})->middleware('auth.multi');
 
 //ログインルート//
 Route::middleware(['web'])->group(function () {
-    Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')->name('login');
+    Route::get('/auth/login', 'Auth\MultiGuardLoginController@showLoginForm')
+        ->middleware('auth.multi')
+        ->name('login');
     Route::post('/auth/login', 'Auth\MultiGuardLoginController@login')->name('login.post');
     Route::post('/auth/logout', 'Auth\MultiGuardLoginController@logout')->name('logout');
 
-    Route::get('/home', 'User\HomeController@index')->middleware('auth:user')->name('home');
+    // Route::get('/home', 'User\HomeController@index')->middleware('auth:user')->name('home');
 
-    Route::get('/coach/home', 'Coach\CoachHomeController@index')->middleware('auth:coach')->name('coach.home');
+    // Route::get('/coach/home', 'Coach\CoachHomeController@index')->middleware('auth:coach')->name('coach.home');
 
-    Route::get('/admin/home', 'Admin\AdminHomeController@index')->middleware('auth:admin')->name('admin.home');
+    // Route::get('/admin/home', 'Admin\AdminHomeController@index')->middleware('auth:admin')->name('admin.home');
 });
+
+// ユーザー用ルート
+Route::middleware(['web', 'auth:user'])->group(function () {
+    Route::get('/home', 'User\HomeController@index')
+        ->name('home');
+});
+
+// コーチ用ルート
+Route::middleware(['web', 'auth:coach'])->group(function () {
+    Route::get('/coach/home', 'Coach\CoachHomeController@index')
+        ->name('coach.home');
+});
+
+// 管理者用ルート
+Route::middleware(['web', 'auth:admin'])->group(function () {
+    Route::get('/admin/home', 'Admin\AdminHomeController@index')
+        ->name('admin.home');
+});
+
 
 //新規登録
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

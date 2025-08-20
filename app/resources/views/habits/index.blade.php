@@ -27,7 +27,7 @@
       <tr>
         <td>{{ $habit->name }}</td>
         <td>{{ $habit->frequency }}</td>
-        <td>{{ $habit->days ?? '-' }}</td> {{-- 継続日数: カラムがあれば --}}
+        <td>{{ $habit->calculateStreakDays() ?? '-' }}</td> {{-- 継続日数: カラムがあれば --}}
         <td>{{ $habit->schedule_time }}</td>
         <td>{{ $habit->notification_time }}</td>
         <td>
