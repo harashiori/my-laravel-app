@@ -151,6 +151,8 @@ return [
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'organization' => '所属',
+        'schedule_time' => '予定時間',
+        'notification_time' => '通知時間',
     ],
 
 ];

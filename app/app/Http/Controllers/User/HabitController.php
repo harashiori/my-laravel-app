@@ -113,11 +113,12 @@ class HabitController extends Controller
         $validated = $request->validate([
         'name' => 'required|string|max:30',
         'frequency'=> 'required|integer|min:1|max:7',
-        'schedule_time' => 'required|date_format:H:i',
-        'notification_time' => 'nullable|date_format:H:i',
+        'schedule_time' => 'required|date_format:H:i:s',
+        'notification_time' => 'nullable|date_format:H:i:s',
         ]);
 
         $habit->update($validated);
+
 
         return redirect()->route('user.habits.index')->with('success', '習慣を更新しました');
     }

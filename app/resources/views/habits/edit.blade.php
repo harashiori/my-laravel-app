@@ -27,7 +27,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">予定時間</label>
-      <input type="time" name="schedule_time" value="{{ old('schedule_time', $habit->schedule_time) }}" class="form-control">
+      <input type="time" name="schedule_time"  value="{{ old('schedule_time', $habit->schedule_time) }}" class="form-control">
     </div>
     <div class="mb-3">
       <label class="form-label">通知時間</label>

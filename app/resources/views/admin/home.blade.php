@@ -13,7 +13,7 @@
          <a href="{{ route('admin.users.index') }}" class="btn btn-link">ユーザー一覧</a>
       </p>
       <p class="d-flex justify-content-between align-items-center">
-        <span><strong>コーチ数：</strong>{{ $userCount }}人</span>
+        <span><strong>コーチ数：</strong>{{ $coachCount }}人</span>
         <a href="{{ route('admin.coaches.index') }}" class="btn btn-link">コーチ一覧</a>
       </p>
     </div>
